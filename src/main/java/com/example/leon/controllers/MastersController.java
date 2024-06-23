@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class MastersController {
     @GetMapping
     private ResponseEntity<List<Masters>> listMasters() {
         List<Masters> masters = mastersService.findAll();
-        return new ResponseEntity<>(masters.stream().collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(new ArrayList<>(masters), HttpStatus.OK);
     }
 
 }
