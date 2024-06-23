@@ -1,0 +1,34 @@
+package com.example.leon.controllers;
+
+import com.example.leon.domain.entities.Schedule;
+import com.example.leon.services.ScheduleService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+@RestController
+@RequestMapping(path = "schedule")
+@RequiredArgsConstructor
+public class ScheduleController {
+
+    private final ScheduleService scheduleService;
+
+    @PostMapping
+    private ResponseEntity<Void> create(
+            @RequestParam Long masterId,
+            @RequestParam int year,
+            @RequestParam int month,
+            @RequestBody List<LocalDate> nonWorkingDays,
+            @RequestParam List<LocalTime> workingHours
+            ) {
+        System.out.println(masterId);
+        scheduleService.createMonthlySchedule(masterId, year, month, nonWorkingDays, workingHours);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+}
