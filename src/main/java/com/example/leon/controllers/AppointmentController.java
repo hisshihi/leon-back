@@ -19,8 +19,13 @@ public class AppointmentController {
 
     @PostMapping
     private ResponseEntity<Void> createAppointment(@RequestBody Appointment appointment) {
-        appointmentService.create(appointment);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        if (!appointmentService.findByTime(appointment.getTime())) {
+            appointmentService.create(appointment);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping

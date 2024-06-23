@@ -6,6 +6,7 @@ import com.example.leon.services.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -22,5 +23,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> findAll() {
         return appointmentRepository.findAll();
+    }
+
+    @Override
+    public boolean findByTime(LocalTime time) {
+        return appointmentRepository.existsByTime(time);
     }
 }
