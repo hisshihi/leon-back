@@ -19,7 +19,7 @@ public class AppointmentController {
 
     @PostMapping
     private ResponseEntity<Void> createAppointment(@RequestBody Appointment appointment) {
-        if (!appointmentService.findByTime(appointment.getTime())) {
+        if (!appointmentService.existsByDateAndTime(appointment.getDate(), appointment.getTime())) {
             appointmentService.create(appointment);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {

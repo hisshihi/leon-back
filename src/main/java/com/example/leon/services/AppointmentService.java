@@ -2,6 +2,7 @@ package com.example.leon.services;
 
 import com.example.leon.domain.entities.Appointment;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -10,5 +11,5 @@ public interface AppointmentService {
 
     List<Appointment> findAll();
 
-    boolean findByTime(LocalTime time);
+    boolean existsByDateAndTime(LocalDate date, LocalTime time);
 }
