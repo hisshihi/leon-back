@@ -6,6 +6,8 @@ import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MastersServiceImpl implements MastersService {
@@ -15,5 +17,10 @@ public class MastersServiceImpl implements MastersService {
     @Override
     public Masters create(Masters masters) {
         return mastersRepository.save(masters);
+    }
+
+    @Override
+    public List<Masters> findAll() {
+        return mastersRepository.findAll();
     }
 }

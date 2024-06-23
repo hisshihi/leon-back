@@ -5,10 +5,10 @@ import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "masters")
@@ -21,6 +21,12 @@ public class MastersController {
     private ResponseEntity<Void> createMasters(@RequestBody Masters masters) {
         mastersService.create(masters);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    private ResponseEntity<List<Masters>> listMasters() {
+        List<Masters> masters = mastersService.findAll();
+        return new ResponseEntity<>(masters.stream().collect(Collectors.toList()), HttpStatus.OK);
     }
 
 }
