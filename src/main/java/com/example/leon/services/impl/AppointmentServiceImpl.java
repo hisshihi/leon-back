@@ -6,6 +6,8 @@ import com.example.leon.services.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
@@ -15,5 +17,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void create(Appointment appointment) {
         appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public List<Appointment> findAll() {
+        return appointmentRepository.findAll();
     }
 }

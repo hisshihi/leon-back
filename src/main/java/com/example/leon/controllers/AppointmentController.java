@@ -5,10 +5,10 @@ import com.example.leon.services.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "appointment")
@@ -21,6 +21,12 @@ public class AppointmentController {
     private ResponseEntity<Void> createAppointment(@RequestBody Appointment appointment) {
         appointmentService.create(appointment);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    private ResponseEntity<List<Appointment>> getListAppointments() {
+        List<Appointment> appointments = appointmentService.findAll();
+        return new ResponseEntity<>(new ArrayList<>(appointments), HttpStatus.OK);
     }
 
 }
