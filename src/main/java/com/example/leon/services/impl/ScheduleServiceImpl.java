@@ -76,4 +76,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         scheduleRepository.saveAll(schedules);
     }
+
+    @Override
+    public List<Schedule> getScheduleForMaster(Long masterId) {
+        return scheduleRepository.findByMasterId(masterId);
+    }
 }

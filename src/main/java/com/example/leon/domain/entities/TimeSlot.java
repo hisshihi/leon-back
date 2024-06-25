@@ -1,5 +1,6 @@
 package com.example.leon.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,7 @@ public class TimeSlot {
 
     @ManyToOne
     @JoinColumn(name = "schedule_id", nullable = false)
+    @JsonBackReference
     private Schedule schedule;
 
     @Column(name = "time", nullable = false)

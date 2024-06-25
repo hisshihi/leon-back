@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,5 +31,15 @@ public class ScheduleController {
         scheduleService.createMonthlySchedule(masterId, year, month, nonWorkingDays, workingHours);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    // Получение всех расписаний
+    @GetMapping("/master")
+    private ResponseEntity<List<Schedule>> getScheduleForMaster(
+            @RequestParam Long masterId
+    ) {
+        List<Schedule> schedules = scheduleService.getScheduleForMaster(masterId);
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
+    }
+
 
 }
