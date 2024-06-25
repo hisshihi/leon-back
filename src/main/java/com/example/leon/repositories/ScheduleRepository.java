@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findByMasterId(Long masterId);
+
+    Schedule findByMasterIdAndDate(Long masterId, LocalDate date);
 }

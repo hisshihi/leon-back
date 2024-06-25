@@ -1,6 +1,7 @@
 package com.example.leon.controllers;
 
 import com.example.leon.domain.entities.Schedule;
+import com.example.leon.requests.ScheduleUpdateRequest;
 import com.example.leon.services.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,17 @@ public class ScheduleController {
     ) {
         List<Schedule> schedules = scheduleService.getScheduleForMaster(masterId);
         return new ResponseEntity<>(schedules, HttpStatus.OK);
+    }
+
+    // Обновиление данных
+    @PutMapping("/update")
+    public ResponseEntity<Void> updateTimeSlotsForDay(
+            @RequestParam Long masterId,
+            @RequestParam boolean isWorking,
+            @RequestBody ScheduleUpdateRequest updateRequest
+    ) {
+        scheduleService.updateSchedule(masterId, updateRequest.getDates(), updateRequest.getTimes(), isWorking);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

@@ -12,4 +12,6 @@ public interface ScheduleService {
     void createMonthlySchedule(Long masterId, int year, int month, List<LocalDate> nonWorkingDays, List<LocalTime> workingHours);
 
     List<Schedule> getScheduleForMaster(Long masterId);
+
+    void updateSchedule(Long masterId, List<LocalDate> dates, List<LocalTime> times, boolean isWorking);
 }
