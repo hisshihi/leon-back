@@ -22,6 +22,7 @@ public class TimeSlot {
 
     @ManyToOne
     @JoinColumn(name = "schedule_id", nullable = false)
+    // Помогает убрать рекурсию из json
     @JsonBackReference
     private Schedule schedule;
 
