@@ -1,5 +1,6 @@
 package com.example.leon.controllers;
 
+import com.example.leon.domain.entities.DaySchedule;
 import com.example.leon.domain.entities.Schedule;
 import com.example.leon.requests.ScheduleUpdateRequest;
 import com.example.leon.services.ScheduleService;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "schedule")
@@ -21,24 +23,33 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    private ResponseEntity<Void> create(
+    public ResponseEntity<Void> create(
             @RequestParam Long masterId,
             @RequestParam int year,
             @RequestParam int month,
             @RequestBody List<LocalDate> nonWorkingDays,
-            @RequestParam List<LocalTime> workingHours
-            ) {
-        System.out.println(masterId);
+            @RequestParam List<LocalTime> workingHours) {
         scheduleService.createMonthlySchedule(masterId, year, month, nonWorkingDays, workingHours);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     // Получение всех расписаний
-    @GetMapping("/master")
-    private ResponseEntity<List<Schedule>> getScheduleForMaster(
-            @RequestParam Long masterId
+    @GetMapping("/day")
+    public ResponseEntity<List<Schedule>> getScheduleForDay(
+            @RequestParam int year,
+            @RequestParam int month,
+            @RequestParam int day) {
+        LocalDate date = LocalDate.of(year, month, day);
+        List<Schedule> schedules = scheduleService.getDailySchedule(date);
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/month")
+    public ResponseEntity<List<DaySchedule>> getSchedule(
+            @RequestParam int year,
+            @RequestParam int month
     ) {
-        List<Schedule> schedules = scheduleService.getScheduleForMaster(masterId);
+        List<DaySchedule> schedules = scheduleService.getMonthlySchedule(year, month);
         return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 

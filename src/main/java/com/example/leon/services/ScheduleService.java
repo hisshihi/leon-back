@@ -1,7 +1,7 @@
 package com.example.leon.services;
 
+import com.example.leon.domain.entities.DaySchedule;
 import com.example.leon.domain.entities.Schedule;
-import org.springframework.http.HttpStatusCode;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,4 +14,8 @@ public interface ScheduleService {
     List<Schedule> getScheduleForMaster(Long masterId);
 
     void updateSchedule(Long masterId, List<LocalDate> dates, List<LocalTime> times, boolean isWorking);
+
+    List<DaySchedule> getMonthlySchedule(int year, int month);
+
+    List<Schedule> getDailySchedule(LocalDate date);
 }
