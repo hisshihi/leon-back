@@ -8,4 +8,6 @@ public interface MastersService {
     Masters create(Masters masters);
 
     List<Masters> findAll();
+
+    Masters findById(Long masterId);
 }

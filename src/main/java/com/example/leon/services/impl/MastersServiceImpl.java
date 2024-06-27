@@ -23,4 +23,9 @@ public class MastersServiceImpl implements MastersService {
     public List<Masters> findAll() {
         return mastersRepository.findAll();
     }
+
+    @Override
+    public Masters findById(Long masterId) {
+        return mastersRepository.findById(masterId).orElseThrow(() -> new RuntimeException("Мастер не найден"));
+    }
 }
