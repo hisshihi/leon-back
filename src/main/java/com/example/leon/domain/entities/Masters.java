@@ -30,8 +30,8 @@ public class Masters {
     @Column(name = "inst")
     private String inst;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "img")
-    private ImageForMaster imageForMaster;
+    @Lob
+    @Column(name = "iamge")
+    private byte[] image;
 
 }

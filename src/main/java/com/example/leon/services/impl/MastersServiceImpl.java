@@ -5,8 +5,11 @@ import com.example.leon.repositories.MastersRepository;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +24,7 @@ public class MastersServiceImpl implements MastersService {
 
     @Override
     public List<Masters> findAll() {
-        return mastersRepository.findAll();
+        return StreamSupport.stream(mastersRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
