@@ -22,13 +22,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
-
+    /**
+     * Создает расписание на месяц для указанного мастера.
+     *
+     * @param masterId       ID мастера
+     * @param year           Год
+     * @param month          Месяц
+     * @param nonWorkingDays Список дней, когда мастер не работает
+     * @param workingHours   Список рабочих часов
+     */
     @Override
     public void createMonthlySchedule(Long masterId, int year, int month, List<LocalDate> nonWorkingDays, List<LocalTime> workingHours) {
         List<Schedule> schedules = new ArrayList<>();
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
+        // Проходим по каждому дню месяца
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             boolean isNonWorkingDay = nonWorkingDays.contains(date);
             Schedule schedule = Schedule.builder()
@@ -49,14 +58,29 @@ public class ScheduleServiceImpl implements ScheduleService {
             schedules.add(schedule);
         }
 
+        // Сохраняем все расписания в базу данных
         scheduleRepository.saveAll(schedules);
     }
 
+    /**
+     * Получает все расписания для указанного мастера.
+     *
+     * @param masterId ID мастера
+     * @return Список расписаний
+     */
     @Override
     public List<Schedule> getScheduleForMaster(Long masterId) {
         return scheduleRepository.findByMasterId(masterId);
     }
 
+    /**
+     * Обновляет расписание для указанного мастера.
+     *
+     * @param masterId  ID мастера
+     * @param dates     Список дат
+     * @param times     Список временных слотов
+     * @param isWorking Статус работы (работает/не работает)
+     */
     @Override
     public void updateSchedule(Long masterId, List<LocalDate> dates, List<LocalTime> times, boolean isWorking) {
         for (LocalDate date : dates) {
@@ -91,6 +115,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
     }
 
+    /**
+     * Получает расписание на месяц, учитывая только те месяцы, для которых есть расписание.
+     *
+     * @param year  Год
+     * @param month Месяц
+     * @return Список расписаний на каждый день месяца
+     */
     @Override
     public List<DaySchedule> getMonthlySchedule(int year, int month) {
         LocalDate latestScheduleDate = scheduleRepository.findLatestScheduleDate();
@@ -119,6 +150,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         return daySchedules;
     }
 
+    /**
+     * Получает расписание на указанный день.
+     *
+     * @param date Дата
+     * @return Список расписаний на указанный день
+     */
     @Override
     public List<Schedule> getDailySchedule(LocalDate date) {
         return scheduleRepository.findByDate(date);
