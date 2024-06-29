@@ -23,6 +23,7 @@ public class MastersController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
+            @RequestParam("post") String post,
             @RequestParam("email") String email,
             @RequestParam("phone") String phone,
             @RequestParam("telegram") String telegram,
@@ -33,6 +34,7 @@ public class MastersController {
             Masters master = Masters.builder()
                     .firstName(firstName)
                     .lastName(lastName)
+                    .post(post)
                     .email(email)
                     .phone(phone)
                     .telegram(telegram)

@@ -21,6 +21,8 @@ public class Masters {
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
+    @Column(name = "post", nullable = false)
+    private String post;
     @Column(name = "email")
     private String email;
     @Column(name = "phone")
