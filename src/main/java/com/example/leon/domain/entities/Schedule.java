@@ -25,7 +25,7 @@ public class Schedule {
     @JoinColumn(name = "master_id", nullable = false)
     private Masters master;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date", nullable = true)
     private LocalDate date;
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
