@@ -28,8 +28,8 @@ public class Appointment {
 
     @Column(name = "client_name", nullable = false)
     private String clientName;
-    @Column(name = "client_email", nullable = false)
-    private String clientEmail;
+    @Column(name = "service", nullable = false)
+    private String service;
     @Column(name = "client_phone", nullable = false)
     private String clientPhone;
 
