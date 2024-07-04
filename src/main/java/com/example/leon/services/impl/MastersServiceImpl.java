@@ -26,7 +26,9 @@ public class MastersServiceImpl implements MastersService {
 
     @Override
     public List<Masters> findAll() {
-        return StreamSupport.stream(mastersRepository.findAll().spliterator(), false).collect(Collectors.toList());
+        return StreamSupport.stream(mastersRepository.findAll().spliterator(), false)
+                .filter(masters -> !masters.getUsername().equals("admin"))
+                .collect(Collectors.toList());
     }
 
     @Override
