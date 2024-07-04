@@ -23,7 +23,8 @@ import java.util.function.Function;
 public class JWTServiceImpl implements JWTService {
 
 //    Создание токена
-    private String generateToken(UserDetails userDetails) {
+    @Override
+    public String generateToken(UserDetails userDetails) {
 //        Jwts.builder() - используется для создания нового JWT.
 //        setSubject(userDetails.getUsername()) - устанавливает субъекта токена, которым является имя пользователя.
         return Jwts.builder().setSubject(userDetails.getUsername())
@@ -69,5 +70,15 @@ public class JWTServiceImpl implements JWTService {
         * */
         byte[] key = Decoders.BASE64.decode("ad70b2a8c1da44cbe209223bbf4252ed1e5c41254f88b6242990aafb81856f4ade43957ab6f7be57f020743db00c9e6987053bde0f3dd1fbbbed1bb57a2d94d19a2e47f49aeb4e42cacf72395a58c9128cf988d6e9716061986e9901e4917ac7d39b0a147ec34225164afd5074b7c5d98f321209804346798ed3050289d544923580c1ce9241b47d643b98310440c5583c33f02d3041ce553b015615b8f351ab6e09ec76f17215373af520444dd3885c4ae9798fab70a31944cafaf801ec43f19a81a60cd67a52487c56d68d1fecc7289c7327470f12526b14ffe98fe5dff297f96413d8f62de8aa80cafd2ca6b3d5290112469d16a2d59401a27c375b06bfbf");
         return Keys.hmacShaKeyFor(key);
+    }
+
+    @Override
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String userName = extractUserName(token);
+        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 }

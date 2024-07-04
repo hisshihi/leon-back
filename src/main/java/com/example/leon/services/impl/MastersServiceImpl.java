@@ -4,8 +4,10 @@ import com.example.leon.domain.entities.Masters;
 import com.example.leon.repositories.MastersRepository;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,5 +32,20 @@ public class MastersServiceImpl implements MastersService {
     @Override
     public Masters findById(Long masterId) {
         return mastersRepository.findById(masterId).orElseThrow(() -> new RuntimeException("Мастер не найден"));
+    }
+
+    @Override
+    // UserDetailsService - интерфейс, предоставляющий метод для загрузки пользовательских данных по имени пользователя.
+    public UserDetailsService masterDetailService() {
+        return new UserDetailsService() {
+            @Override
+            /*
+            * loadUserByUsername(String username) - метод, который пытается найти пользователя в mastersRepository по имени пользователя.
+            * Если пользователь не найден, выбрасывается исключение UsernameNotFoundException.
+            * */
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return mastersRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("Мастер не найден"));
+            }
+        };
     }
 }
