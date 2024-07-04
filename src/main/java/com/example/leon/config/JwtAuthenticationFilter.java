@@ -24,7 +24,7 @@ import static org.apache.commons.lang3.StringUtils.startsWith;
 @Component
 @RequiredArgsConstructor
 // JwtAuthenticatonFilter - фильтр, который выполняется один раз за запрос (OncePerRequestFilter).
-public class JwtAuthenticatonFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final MastersService mastersService;
