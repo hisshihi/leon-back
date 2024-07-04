@@ -37,7 +37,6 @@ public class Masters {
 //    security
     private String userName;
     private String password;
-    private String role = "master";
-    private Boolean enabled = true;
+    private Role role;
 
 }
