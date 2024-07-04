@@ -28,7 +28,6 @@ public class MastersController {
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
             @RequestParam("post") String post,
-            @RequestParam("email") String email,
             @RequestParam("phone") String phone,
             @RequestParam("telegram") String telegram,
             @RequestParam("inst") String inst,
@@ -41,7 +40,6 @@ public class MastersController {
                     .firstName(firstName)
                     .lastName(lastName)
                     .post(post)
-                    .email(email)
                     .phone(phone)
                     .telegram(telegram)
                     .inst(inst)

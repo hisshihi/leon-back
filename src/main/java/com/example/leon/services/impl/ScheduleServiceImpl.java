@@ -41,7 +41,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             boolean isNonWorkingDay = nonWorkingDays.contains(date);
             Schedule schedule = Schedule.builder()
-                    .master(new Masters(masterId, null, null, null, null, null, null, null, null, null, null, null, null))
+                    .master(new Masters(masterId, null, null, null, null, null, null, null, null, null, null, null))
                     .date(date)
                     .build();
 

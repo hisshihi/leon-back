@@ -23,8 +23,6 @@ public class Masters {
     private String lastName;
     @Column(name = "post", nullable = false)
     private String post;
-    @Column(name = "email")
-    private String email;
     @Column(name = "phone")
     private String phone;
     @Column(name = "telegram")
