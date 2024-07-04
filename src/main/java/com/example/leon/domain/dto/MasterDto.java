@@ -18,7 +18,6 @@ public class MasterDto {
     private String firstName;
     private String lastName;
     private String post;
-    private String email;
     private String phone;
     private String telegram;
     private String inst;
