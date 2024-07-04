@@ -1,6 +1,8 @@
 package com.example.leon.controllers;
 
+import com.example.leon.domain.dto.MasterDto;
 import com.example.leon.domain.entities.Masters;
+import com.example.leon.mappers.impl.MasterMapper;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "masters")
@@ -17,6 +20,7 @@ import java.util.List;
 public class MastersController {
 
     private final MastersService mastersService;
+    private final MasterMapper masterMapper;
 
     @PostMapping
     private ResponseEntity<Void> createMasters(
@@ -27,7 +31,9 @@ public class MastersController {
             @RequestParam("email") String email,
             @RequestParam("phone") String phone,
             @RequestParam("telegram") String telegram,
-            @RequestParam("inst") String inst
+            @RequestParam("inst") String inst,
+            @RequestParam("userName") String userName,
+            @RequestParam("password") String password
             ) {
 
         try {
@@ -40,6 +46,8 @@ public class MastersController {
                     .telegram(telegram)
                     .inst(inst)
                     .image(file.getBytes())
+                    .userName(userName)
+                    .password(password)
                     .build();
 
             mastersService.create(master);
@@ -52,9 +60,10 @@ public class MastersController {
     }
 
     @GetMapping
-    private ResponseEntity<List<Masters>> listMasters() {
+    private ResponseEntity<List<MasterDto>> listMasters() {
         List<Masters> masters = mastersService.findAll();
-        return new ResponseEntity<>(masters, HttpStatus.OK);
+        List<MasterDto> masterDtoList = masters.stream().map(masterMapper::mapTo).toList();
+        return new ResponseEntity<>(masterDtoList, HttpStatus.OK);
     }
 
 }
