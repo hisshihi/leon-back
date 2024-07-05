@@ -1,6 +1,7 @@
 package com.example.leon.controllers;
 
 import com.example.leon.domain.dto.JwtAuthenticationResponse;
+import com.example.leon.domain.dto.RefreshTokenRequest;
 import com.example.leon.domain.dto.SignInRequest;
 import com.example.leon.domain.entities.Masters;
 import com.example.leon.services.AuthenticationService;
@@ -21,6 +22,11 @@ public class AuthenticationController {
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SignInRequest signInRequest) {
         return ResponseEntity.ok(authenticationService.signIn(signInRequest));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtAuthenticationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
     }
 
 }
