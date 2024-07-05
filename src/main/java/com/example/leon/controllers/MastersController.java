@@ -2,6 +2,7 @@ package com.example.leon.controllers;
 
 import com.example.leon.domain.dto.MasterDto;
 import com.example.leon.domain.entities.Masters;
+import com.example.leon.domain.entities.Role;
 import com.example.leon.mappers.impl.MasterMapper;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,7 @@ public class MastersController {
                     .image(file.getBytes())
                     .userName(userName)
                     .password(password)
+                    .role(Role.MASTER)
                     .build();
 
             mastersService.create(master);

@@ -1,5 +1,6 @@
 package com.example.leon.services.impl;
 
+import com.example.leon.domain.entities.Masters;
 import com.example.leon.services.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.function.Function;
 
 /*
@@ -76,6 +78,20 @@ public class JWTServiceImpl implements JWTService {
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    @Override
+    public String generateRefreshToken(HashMap<String, Object> objectObjectHashMap, Masters master) {
+        // Тоже самое, только передаём параметры для рефреш токена
+        return Jwts.builder().setClaims(objectObjectHashMap).setSubject(master.getUsername())
+                // Дата выпуска
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                // Срок жизни
+                .setExpiration(new Date(System.currentTimeMillis() + 604800000))
+                // Ключ подписи
+                .signWith(getSiginKey(), SignatureAlgorithm.HS256)
+//                compact() - генерирует и возвращает окончательный строковый представление токена.
+                .compact();
     }
 
     private boolean isTokenExpired(String token) {

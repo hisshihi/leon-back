@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/schedule/**").permitAll()
                         // Разрешение доступа без авторизации к POST запросу
                         .requestMatchers(HttpMethod.POST, "/appointment").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         // Запросы требующие роль ADMIN
                         .requestMatchers(HttpMethod.POST, "/masters/**").hasAnyAuthority(Role.ADMIN.name())
                         // Все остальные запросы требуют аутентификации
