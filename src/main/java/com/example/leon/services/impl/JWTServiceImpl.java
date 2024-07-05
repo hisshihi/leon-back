@@ -30,6 +30,7 @@ public class JWTServiceImpl implements JWTService {
 //        Jwts.builder() - используется для создания нового JWT.
 //        setSubject(userDetails.getUsername()) - устанавливает субъекта токена, которым является имя пользователя.
         return Jwts.builder().setSubject(userDetails.getUsername())
+                .claim("role", userDetails.getAuthorities())
                 // Дата выпуска
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 // Срок жизни

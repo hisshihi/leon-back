@@ -39,6 +39,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         // Запросы требующие роль ADMIN
                         .requestMatchers(HttpMethod.POST, "/masters/**").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/schedule/**").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "schedule/**").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/appointment").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
                         // Все остальные запросы требуют аутентификации
                         .anyRequest().authenticated()
                 )

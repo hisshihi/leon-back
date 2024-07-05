@@ -8,6 +8,7 @@ import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ public class MastersController {
 
     private final MastersService mastersService;
     private final MasterMapper masterMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping
     private ResponseEntity<Void> createMasters(
@@ -46,7 +48,7 @@ public class MastersController {
                     .inst(inst)
                     .image(file.getBytes())
                     .userName(userName)
-                    .password(password)
+                    .password(passwordEncoder.encode(password))
                     .role(Role.MASTER)
                     .build();
 
