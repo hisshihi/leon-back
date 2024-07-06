@@ -78,7 +78,7 @@ public class MastersController {
     }
 
     @PatchMapping(path = "/admin/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    private ResponseEntity<Void> pathMaster(
+    private ResponseEntity<Masters> pathMaster(
             @PathVariable(value = "id", required = false) Long id,
             @RequestParam(value = "firstName", required = false) String firstName,
             @RequestParam(value = "lastName", required = false) String lastName,
@@ -107,7 +107,7 @@ public class MastersController {
         if (file != null && !file.isEmpty()) masters.setImage(file.getBytes());
 
         mastersService.updateMaster(id, masters);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(masters);
 
     }
 

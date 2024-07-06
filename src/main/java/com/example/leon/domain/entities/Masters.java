@@ -37,7 +37,7 @@ public class Masters implements UserDetails {
     private String inst;
 
     @Lob
-    @Column(name = "iamge")
+    @Column(name = "image")
     private byte[] image;
 
 //    security
