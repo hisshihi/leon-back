@@ -3,6 +3,7 @@ package com.example.leon.services.impl;
 import com.example.leon.domain.entities.Masters;
 import com.example.leon.repositories.MastersRepository;
 import com.example.leon.services.MastersService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,8 +34,8 @@ public class MastersServiceImpl implements MastersService {
     }
 
     @Override
-    public Masters findById(Long masterId) {
-        return mastersRepository.findById(masterId).orElseThrow(() -> new RuntimeException("Мастер не найден"));
+    public Optional<Masters> findById(Long masterId) {
+        return Optional.ofNullable(mastersRepository.findById(masterId).orElseThrow(() -> new RuntimeException("Мастер не найден")));
     }
 
     @Override
@@ -49,5 +51,25 @@ public class MastersServiceImpl implements MastersService {
                 return mastersRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("Мастер не найден"));
             }
         };
+    }
+
+    @Override
+    public Masters updateMaster(Long id, Masters masters) {
+        Optional<Masters> optionalMasters = mastersRepository.findById(id);
+        if (!optionalMasters.isPresent()) throw new EntityNotFoundException("Мастер с id " + id + " не найден");
+
+        Masters existingMaster = optionalMasters.get();
+
+        // Обновляем только те поля, которые были переданы
+        if (masters.getFirstName() != null) existingMaster.setFirstName(masters.getFirstName());
+        if (masters.getLastName() != null) existingMaster.setLastName(masters.getLastName());
+        if (masters.getPost() != null) existingMaster.setPost(masters.getPost());
+        if (masters.getPhone() != null) existingMaster.setPhone(masters.getPhone());
+        if (masters.getTelegram() != null) existingMaster.setTelegram(masters.getTelegram());
+        if (masters.getInst() != null) existingMaster.setInst(masters.getInst());
+        if (masters.getUsername() != null) existingMaster.setUserName(masters.getUsername());
+        if (masters.getImage() != null) existingMaster.setImage(masters.getImage());
+
+        return mastersRepository.save(existingMaster);
     }
 }

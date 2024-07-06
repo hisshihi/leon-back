@@ -7,6 +7,7 @@ import com.example.leon.mappers.impl.MasterMapper;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -66,6 +68,47 @@ public class MastersController {
         List<Masters> masters = mastersService.findAll();
         List<MasterDto> masterDtoList = masters.stream().map(masterMapper::mapTo).toList();
         return new ResponseEntity<>(masterDtoList, HttpStatus.OK);
+    }
+
+//    Вывод всех мастеров для админа
+    @GetMapping("/admin")
+    private ResponseEntity<List<Masters>> listMastersAdmin() {
+        List<Masters> masters = mastersService.findAll();
+        return ResponseEntity.ok(masters);
+    }
+
+    @PatchMapping(path = "/admin/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    private ResponseEntity<Void> pathMaster(
+            @PathVariable(value = "id", required = false) Long id,
+            @RequestParam(value = "firstName", required = false) String firstName,
+            @RequestParam(value = "lastName", required = false) String lastName,
+            @RequestParam(value = "post", required = false) String post,
+            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "telegram", required = false) String telegram,
+            @RequestParam(value = "inst", required = false) String inst,
+            @RequestParam(value = "username", required = false) String userName,
+            @RequestParam(value = "image", required = false) MultipartFile file
+    ) throws IOException {
+
+        // Загрузка существующуего пользователя из бд
+        Optional<Masters> optionalMasters = mastersService.findById(id);
+        if (!optionalMasters.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        Masters masters = optionalMasters.get();
+
+        // Обновите только те поля, которые были переданы в запросе
+        if (firstName != null) masters.setFirstName(firstName);
+        if (lastName != null) masters.setLastName(lastName);
+        if (post != null) masters.setPost(post);
+        if (phone != null) masters.setPhone(phone);
+        if (telegram != null) masters.setTelegram(telegram);
+        if (inst != null) masters.setInst(inst);
+        if (userName != null) masters.setUserName(userName);
+        if (file != null && !file.isEmpty()) masters.setImage(file.getBytes());
+
+        mastersService.updateMaster(id, masters);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
 }
