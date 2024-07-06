@@ -72,4 +72,9 @@ public class MastersServiceImpl implements MastersService {
 
         return mastersRepository.save(existingMaster);
     }
+
+    @Override
+    public void deleteMaster(Optional<Masters> optionalMasters) {
+        mastersRepository.deleteById(optionalMasters.get().getId());
+    }
 }

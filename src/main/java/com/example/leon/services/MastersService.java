@@ -17,4 +17,6 @@ public interface MastersService {
     UserDetailsService masterDetailService();
 
     Masters updateMaster(Long id, Masters masters);
+
+    void deleteMaster(Optional<Masters> optionalMasters);
 }

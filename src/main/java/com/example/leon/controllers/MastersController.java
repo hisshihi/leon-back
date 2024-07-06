@@ -111,4 +111,15 @@ public class MastersController {
 
     }
 
+    // Удаление мастера
+    @DeleteMapping("/admin/{id}")
+    private ResponseEntity<Void> deleteMaster(@PathVariable Long id) {
+        Optional<Masters> optionalMasters = mastersService.findById(id);
+        if (!optionalMasters.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        mastersService.deleteMaster(optionalMasters);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
