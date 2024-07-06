@@ -28,7 +28,7 @@ public class MastersController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping
-    private ResponseEntity<Void> createMasters(
+    private ResponseEntity<Masters> createMasters(
             @RequestParam("file") MultipartFile file,
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
@@ -55,7 +55,7 @@ public class MastersController {
                     .build();
 
             mastersService.create(master);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(master, HttpStatus.CREATED);
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
