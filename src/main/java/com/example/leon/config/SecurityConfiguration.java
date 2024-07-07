@@ -47,8 +47,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "schedule/**").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/appointment").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/service").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/additional-service").hasAnyAuthority(Role.ADMIN.name())
                         // Запросы для мастера и админа
-                        .requestMatchers(HttpMethod.GET, "/appointment/master").hasAnyAuthority(Role.MASTER.name())
+                        .requestMatchers(HttpMethod.GET, "/appointment/master").hasAnyAuthority(Role.MASTER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/additional-service").hasAnyAuthority(Role.MASTER.name(), Role.ADMIN.name())
                         // Все остальные запросы требуют аутентификации
                         .anyRequest().authenticated()
                 )

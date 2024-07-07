@@ -38,4 +38,13 @@ public class Appointment {
     @ManyToOne
     private Masters master;
 
+    @Column(name = "all_price", nullable = false)
+    private int allPrice;
+
+    @Column(nullable = false)
+    private int priceForMainService;
+
+    @Column(nullable = false)
+    private int priceForAdditionalService;
+
 }
