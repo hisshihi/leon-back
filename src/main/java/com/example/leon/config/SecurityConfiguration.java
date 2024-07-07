@@ -44,7 +44,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, "masters/admin").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/schedule/**").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.PUT, "schedule/**").hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.GET, "/appointment").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
+                        .requestMatchers(HttpMethod.GET, "/appointment").hasAnyAuthority(Role.ADMIN.name())
+                        // Запросы для мастера и админа
+                        .requestMatchers(HttpMethod.GET, "/appointment/master").hasAnyAuthority(Role.MASTER.name())
                         // Все остальные запросы требуют аутентификации
                         .anyRequest().authenticated()
                 )

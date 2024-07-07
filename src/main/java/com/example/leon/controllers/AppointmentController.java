@@ -1,7 +1,9 @@
 package com.example.leon.controllers;
 
 import com.example.leon.domain.entities.Appointment;
+import com.example.leon.domain.entities.Masters;
 import com.example.leon.services.AppointmentService;
+import com.example.leon.services.MastersService;
 import com.twilio.Twilio;
 import com.twilio.rest.verify.v2.service.Verification;
 import com.twilio.rest.verify.v2.service.VerificationCheck;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +94,13 @@ public class AppointmentController {
     private ResponseEntity<List<Appointment>> getListAppointments() {
         List<Appointment> appointments = appointmentService.findAll();
         return new ResponseEntity<>(new ArrayList<>(appointments), HttpStatus.OK);
+    }
+
+//    Получение записей мастера
+    @GetMapping("/master")
+    private ResponseEntity<List<Appointment>> getListAppointmentsForMaster(Principal principal) {
+        List<Appointment> appointments = appointmentService.findAllByMaster(principal);
+        return ResponseEntity.ok(new ArrayList<>(appointments));
     }
 
 }
