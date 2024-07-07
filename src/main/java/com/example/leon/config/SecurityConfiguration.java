@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                         // Запросы для мастера и админа
                         .requestMatchers(HttpMethod.GET, "/appointment/master").hasAnyAuthority(Role.MASTER.name(), Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/additional-service").hasAnyAuthority(Role.MASTER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/service").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
                         // Все остальные запросы требуют аутентификации
                         .anyRequest().authenticated()
                 )

@@ -1,10 +1,15 @@
 package com.example.leon.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -20,4 +25,9 @@ public class ServiceAppointment {
     @Column(name = "name_service")
     private String name;
 
+    @OneToMany(mappedBy = "serviceAppointment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ServicePrice> prices = new ArrayList<>();
+
 }
+
