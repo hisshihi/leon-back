@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                         // Разрешение доступа без авторизации к GET запросу
                         .requestMatchers(HttpMethod.GET, "/masters").permitAll()
                         .requestMatchers(HttpMethod.GET, "/schedule/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/service").permitAll()
                         // Разрешение доступа без авторизации к POST запросу
                         .requestMatchers(HttpMethod.POST, "/appointment/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
@@ -45,6 +46,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/schedule/**").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.PUT, "schedule/**").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/appointment").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/service").hasAnyAuthority(Role.ADMIN.name())
                         // Запросы для мастера и админа
                         .requestMatchers(HttpMethod.GET, "/appointment/master").hasAnyAuthority(Role.MASTER.name())
                         // Все остальные запросы требуют аутентификации
