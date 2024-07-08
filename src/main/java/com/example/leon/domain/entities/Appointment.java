@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -38,13 +40,22 @@ public class Appointment {
     @ManyToOne
     private Masters master;
 
-    @Column(name = "all_price", nullable = false)
+    @Column(name = "all_price", nullable = true)
     private int allPrice;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int priceForMainService;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int priceForAdditionalService;
+
+    // Связь с AdditionalServiceAppointment
+    @ManyToMany
+    @JoinTable(
+            name = "appointment_additional_service",
+            joinColumns = @JoinColumn(name = "appointment_id"),
+            inverseJoinColumns = @JoinColumn(name = "additional_service_id")
+    )
+    private List<AdditionalServiceAppointment> additionalServices = new ArrayList<>();
 
 }

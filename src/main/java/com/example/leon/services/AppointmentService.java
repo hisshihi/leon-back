@@ -15,4 +15,6 @@ public interface AppointmentService {
     boolean existsByDateAndTime(LocalDate date, LocalTime time);
 
     List<Appointment> findAllByMaster(Principal principal);
+
+    void updatedAppointment(Long id, Appointment updatedAppointment);
 }

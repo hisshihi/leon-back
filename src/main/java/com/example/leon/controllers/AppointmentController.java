@@ -1,14 +1,10 @@
 package com.example.leon.controllers;
 
 import com.example.leon.domain.entities.Appointment;
-import com.example.leon.domain.entities.Masters;
 import com.example.leon.services.AppointmentService;
-import com.example.leon.services.MastersService;
-import com.twilio.Twilio;
-import com.twilio.rest.verify.v2.service.Verification;
-import com.twilio.rest.verify.v2.service.VerificationCheck;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -101,6 +97,15 @@ public class AppointmentController {
     private ResponseEntity<List<Appointment>> getListAppointmentsForMaster(Principal principal) {
         List<Appointment> appointments = appointmentService.findAllByMaster(principal);
         return ResponseEntity.ok(new ArrayList<>(appointments));
+    }
+
+    @PutMapping(value = "/{id}")
+    private ResponseEntity<Void> updateAppointment(
+            @PathVariable Long id,
+            @RequestBody Appointment updatedAppointment
+    ) {
+        appointmentService.updatedAppointment(id, updatedAppointment);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

@@ -41,4 +41,22 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepository.findAllByMaster(masters);
     }
 
+    @Override
+    public void updatedAppointment(Long id, Appointment updatedAppointment) {
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Запись не существует"));
+
+        appointment.setDate(updatedAppointment.getDate());
+        appointment.setTime(updatedAppointment.getTime());
+        appointment.setClientName(updatedAppointment.getClientName());
+        appointment.setService(updatedAppointment.getService());
+        appointment.setClientPhone(updatedAppointment.getClientPhone());
+        appointment.setAllPrice(updatedAppointment.getAllPrice());
+        appointment.setPriceForMainService(updatedAppointment.getPriceForMainService());
+        appointment.setPriceForAdditionalService(updatedAppointment.getPriceForAdditionalService());
+        appointment.setMaster(updatedAppointment.getMaster());
+        appointment.setAdditionalServices(updatedAppointment.getAdditionalServices());
+
+        appointmentRepository.save(appointment);
+    }
+
 }
