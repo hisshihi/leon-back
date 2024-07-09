@@ -58,4 +58,7 @@ public class Appointment {
     )
     private List<AdditionalServiceAppointment> additionalServices = new ArrayList<>();
 
+    @Column(name = "date_created")
+    private LocalDate dateCreated;
+
 }

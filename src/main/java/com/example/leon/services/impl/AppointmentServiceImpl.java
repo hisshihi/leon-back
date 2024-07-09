@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -22,12 +23,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void create(Appointment appointment) {
+        appointment.setDateCreated(LocalDate.now());
         appointmentRepository.save(appointment);
     }
 
     @Override
     public List<Appointment> findAll() {
-        return appointmentRepository.findAll();
+        return appointmentRepository.findAllOrderByDateCreatedDesc();
     }
 
     @Override
@@ -38,7 +40,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> findAllByMaster(Principal principal) {
         Masters masters = (Masters) mastersService.masterDetailService().loadUserByUsername(principal.getName());
-        return appointmentRepository.findAllByMaster(masters);
+        return appointmentRepository.findAllByMasterOrderByDateCreatedDesc(masters);
     }
 
     @Override
