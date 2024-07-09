@@ -17,4 +17,6 @@ public interface AppointmentService {
     List<Appointment> findAllByMaster(Principal principal);
 
     void updatedAppointment(Long id, Appointment updatedAppointment);
+
+    void delete(Long id);
 }

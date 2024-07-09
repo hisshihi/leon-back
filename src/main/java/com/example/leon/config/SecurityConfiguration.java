@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/additional-service").hasAnyAuthority(Role.MASTER.name(), Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/service").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
                         .requestMatchers(HttpMethod.PUT, "/appointment/**").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
+                        .requestMatchers(HttpMethod.DELETE, "/appointment/**").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
                         // Все остальные запросы требуют аутентификации
                         .anyRequest().authenticated()
                 )
