@@ -80,6 +80,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private void updateEarnings(Long masterId, int earnings) {
         Earnings existingEarnings = earningRepository.findByMasterId(masterId).orElseGet(() -> Earnings.builder().masterId(masterId).totalEarnings(0).build());
         existingEarnings.setTotalEarnings(existingEarnings.getTotalEarnings() + earnings);
+        existingEarnings.setMasterEarnings(existingEarnings.getMasterEarnings() + (earnings * 40) / 100);
         earningRepository.save(existingEarnings);
     }
 
@@ -91,7 +92,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public int getEarningsByMaster(Long masterId) {
         return earningRepository.findByMasterId(masterId)
-                .map(Earnings::getTotalEarnings)
+                .map(Earnings::getMasterEarnings)
                 .orElse(0);
     }
 

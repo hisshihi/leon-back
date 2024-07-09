@@ -23,6 +23,7 @@ public class Earnings {
     @Column(nullable = false)
     private Long masterId;
 
-//    todo: добавить сколько заработал каждый мастер
+    @Column(nullable = false)
+    private int masterEarnings;
 
 }
