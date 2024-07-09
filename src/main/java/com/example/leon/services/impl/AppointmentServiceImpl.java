@@ -1,8 +1,10 @@
 package com.example.leon.services.impl;
 
 import com.example.leon.domain.entities.Appointment;
+import com.example.leon.domain.entities.Earnings;
 import com.example.leon.domain.entities.Masters;
 import com.example.leon.repositories.AppointmentRepository;
+import com.example.leon.repositories.EarningRepository;
 import com.example.leon.services.AppointmentService;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
     private final MastersService mastersService;
+    private final EarningRepository earningRepository;
 
     @Override
     public void create(Appointment appointment) {
@@ -58,6 +61,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setMaster(updatedAppointment.getMaster());
         appointment.setAdditionalServices(updatedAppointment.getAdditionalServices());
 
+        updateEarnings(appointment.getMaster().getId(), appointment.getAllPrice());
+
         appointmentRepository.save(appointment);
     }
 
@@ -69,6 +74,25 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> findByClientName(String name) {
         return appointmentRepository.findByClientNameContainingIgnoreCase(name);
+    }
+
+//    Обновление earnings
+    private void updateEarnings(Long masterId, int earnings) {
+        Earnings existingEarnings = earningRepository.findByMasterId(masterId).orElseGet(() -> Earnings.builder().masterId(masterId).totalEarnings(0).build());
+        existingEarnings.setTotalEarnings(existingEarnings.getTotalEarnings() + earnings);
+        earningRepository.save(existingEarnings);
+    }
+
+    @Override
+    public int getTotalEarnings() {
+        return earningRepository.findTotalEarnings();
+    }
+
+    @Override
+    public int getEarningsByMaster(Long masterId) {
+        return earningRepository.findByMasterId(masterId)
+                .map(Earnings::getTotalEarnings)
+                .orElse(0);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.example.leon.controllers;
 
 import com.example.leon.domain.entities.Appointment;
+import com.example.leon.domain.entities.Masters;
 import com.example.leon.services.AppointmentService;
+import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import java.util.List;
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
+    private final MastersService mastersService;
     private final String ACCOUNT_SID = "ACbfbbf74795104a6c2c63b3d268b46d3a";
     private final String AUTH_TOKEN = "db111304a236c10f8e1a50bfe16cad42";
     private final String SERVICE_SID = "VA81459b11d4d58ee79f41b89e8367f42a";
@@ -118,6 +121,19 @@ public class AppointmentController {
     private ResponseEntity<List<Appointment>> findByClientName(@RequestParam String name) {
         List<Appointment> appointments = appointmentService.findByClientName(name);
         return ResponseEntity.ok(new ArrayList<>(appointments));
+    }
+
+    @GetMapping("/total")
+    private ResponseEntity<Integer> getTotalEarnings() {
+        int totalEarnings = appointmentService.getTotalEarnings();
+        return ResponseEntity.ok(totalEarnings);
+    }
+
+    @GetMapping("/total/master")
+    private ResponseEntity<Integer> getEarningsByMaster(Principal principal) {
+        Masters master = (Masters) mastersService.masterDetailService().loadUserByUsername(principal.getName());
+        int earnings = appointmentService.getEarningsByMaster(master.getId());
+        return ResponseEntity.ok(earnings);
     }
 
 }

@@ -21,4 +21,8 @@ public interface AppointmentService {
     void delete(Long id);
 
     List<Appointment> findByClientName(String name);
+
+    int getTotalEarnings();
+
+    int getEarningsByMaster(Long masterId);
 }
