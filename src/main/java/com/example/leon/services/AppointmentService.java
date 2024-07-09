@@ -19,4 +19,6 @@ public interface AppointmentService {
     void updatedAppointment(Long id, Appointment updatedAppointment);
 
     void delete(Long id);
+
+    List<Appointment> findByClientName(String name);
 }

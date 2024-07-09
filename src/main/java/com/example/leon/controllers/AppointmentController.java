@@ -114,4 +114,10 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/client-name")
+    private ResponseEntity<List<Appointment>> findByClientName(@RequestParam String name) {
+        List<Appointment> appointments = appointmentService.findByClientName(name);
+        return ResponseEntity.ok(new ArrayList<>(appointments));
+    }
+
 }

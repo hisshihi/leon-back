@@ -66,4 +66,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentRepository.deleteById(id);
     }
 
+    @Override
+    public List<Appointment> findByClientName(String name) {
+        return appointmentRepository.findByClientNameContainingIgnoreCase(name);
+    }
+
 }

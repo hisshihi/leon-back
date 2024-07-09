@@ -23,4 +23,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query("SELECT a FROM Appointment a WHERE a.master = :master ORDER BY a.dateCreated DESC")
     List<Appointment> findAllByMasterOrderByDateCreatedDesc(@Param("master") Masters masters);
 
+    List<Appointment> findByClientNameContainingIgnoreCase(String clientName);
+
 }
