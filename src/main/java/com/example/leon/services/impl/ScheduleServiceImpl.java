@@ -1,9 +1,7 @@
 package com.example.leon.services.impl;
 
-import com.example.leon.domain.entities.DaySchedule;
-import com.example.leon.domain.entities.Masters;
-import com.example.leon.domain.entities.Schedule;
-import com.example.leon.domain.entities.TimeSlot;
+import com.example.leon.domain.entities.*;
+import com.example.leon.repositories.AppointmentRepository;
 import com.example.leon.repositories.ScheduleRepository;
 import com.example.leon.services.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +12,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +20,7 @@ import java.util.stream.Collectors;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final AppointmentRepository appointmentRepository;
 
     /**
      * Создает расписание на месяц для указанного мастера.
@@ -158,6 +158,25 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public List<Schedule> getDailySchedule(LocalDate date) {
-        return scheduleRepository.findByDate(date);
+        // Получаем все записи на указанную дату
+        List<Appointment> appointments = appointmentRepository.findByDate(date);
+
+        // Собираем все занятые временные слоты
+        Set<LocalTime> occupiedTimeSlots = appointments.stream()
+                .map(Appointment::getTime)
+                .collect(Collectors.toSet());
+
+        // Получаем расписание на указанную дату
+        List<Schedule> schedules = scheduleRepository.findByDate(date);
+
+        // Фильтруем временные слоты, исключая занятые
+        for (Schedule schedule : schedules) {
+            List<TimeSlot> availableTimeSlots = schedule.getTimeSlots().stream()
+                    .filter(timeSlot -> !occupiedTimeSlots.contains(timeSlot.getTime()))
+                    .collect(Collectors.toList());
+            schedule.setTimeSlots(availableTimeSlots);
+        }
+
+        return schedules;
     }
 }
