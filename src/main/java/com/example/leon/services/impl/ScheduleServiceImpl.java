@@ -1,7 +1,9 @@
 package com.example.leon.services.impl;
 
-import com.example.leon.domain.entities.*;
-import com.example.leon.repositories.AppointmentRepository;
+import com.example.leon.domain.entities.DaySchedule;
+import com.example.leon.domain.entities.Masters;
+import com.example.leon.domain.entities.Schedule;
+import com.example.leon.domain.entities.TimeSlot;
 import com.example.leon.repositories.ScheduleRepository;
 import com.example.leon.services.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,7 +21,6 @@ import java.util.stream.Collectors;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final AppointmentRepository appointmentRepository;
 
     /**
      * Создает расписание на месяц для указанного мастера.
@@ -66,30 +69,8 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return Список расписаний
      */
     @Override
-    public List<Schedule> getScheduleForMaster(Long masterId, LocalDate date) {
-        // Получаем все записи на указанную дату
-        List<Appointment> appointments = appointmentRepository.findByDate(date);
-
-        // Собираем все занятые временные слоты
-        Set<LocalTime> occupiedTimeSlots = appointments.stream()
-                .map(Appointment::getTime)
-                .collect(Collectors.toSet());
-
-        // Получаем расписание мастера на указанную дату
-        Schedule schedule = scheduleRepository.findByMasterIdAndDate(masterId, date);
-
-        if (schedule == null) {
-            return Collections.emptyList();
-        }
-
-        // Фильтруем временные слоты, исключая занятые
-        List<TimeSlot> availableTimeSlots = schedule.getTimeSlots().stream()
-                .filter(timeSlot -> !occupiedTimeSlots.contains(timeSlot.getTime()))
-                .collect(Collectors.toList());
-
-        schedule.setTimeSlots(availableTimeSlots);
-
-        return Collections.singletonList(schedule);
+    public List<Schedule> getScheduleForMaster(Long masterId) {
+        return scheduleRepository.findByMasterId(masterId);
     }
 
     /**
@@ -143,30 +124,20 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public List<DaySchedule> getMonthlySchedule(int year, int month) {
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-
-        // Получаем все записи на указанный месяц
-        List<Appointment> appointments = appointmentRepository.findByDateBetween(startDate, endDate);
-
-        // Группируем записи по датам
-        Map<LocalDate, Set<LocalTime>> occupiedTimeSlotsByDate = appointments.stream()
-                .collect(Collectors.groupingBy(Appointment::getDate,
-                        Collectors.mapping(Appointment::getTime, Collectors.toSet())));
-
-        // Получаем расписание за указанный месяц
-        List<Schedule> schedules = scheduleRepository.findByDateBetween(startDate, endDate);
-
-        // Фильтруем временные слоты, исключая занятые
-        for (Schedule schedule : schedules) {
-            Set<LocalTime> occupiedTimeSlots = occupiedTimeSlotsByDate.getOrDefault(schedule.getDate(), Collections.emptySet());
-            List<TimeSlot> availableTimeSlots = schedule.getTimeSlots().stream()
-                    .filter(timeSlot -> !occupiedTimeSlots.contains(timeSlot.getTime()))
-                    .collect(Collectors.toList());
-            schedule.setTimeSlots(availableTimeSlots);
+        LocalDate latestScheduleDate = scheduleRepository.findLatestScheduleDate();
+        if (latestScheduleDate == null) {
+            return new ArrayList<>();
         }
 
-        // Группируем расписание по датам
+        LocalDate requestedDate = LocalDate.of(year, month, 1);
+        if (requestedDate.isAfter(latestScheduleDate)) {
+            return new ArrayList<>();
+        }
+
+        LocalDate startDate = requestedDate.withDayOfMonth(1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        List<Schedule> schedules = scheduleRepository.findByDateBetween(startDate, endDate);
         Map<LocalDate, List<Schedule>> groupedSchedules = schedules.stream()
                 .collect(Collectors.groupingBy(Schedule::getDate));
 
@@ -187,25 +158,6 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public List<Schedule> getDailySchedule(LocalDate date) {
-        // Получаем все записи на указанную дату
-        List<Appointment> appointments = appointmentRepository.findByDate(date);
-
-        // Собираем все занятые временные слоты
-        Set<LocalTime> occupiedTimeSlots = appointments.stream()
-                .map(Appointment::getTime)
-                .collect(Collectors.toSet());
-
-        // Получаем расписание на указанную дату
-        List<Schedule> schedules = scheduleRepository.findByDate(date);
-
-        // Фильтруем временные слоты, исключая занятые
-        for (Schedule schedule : schedules) {
-            List<TimeSlot> availableTimeSlots = schedule.getTimeSlots().stream()
-                    .filter(timeSlot -> !occupiedTimeSlots.contains(timeSlot.getTime()))
-                    .collect(Collectors.toList());
-            schedule.setTimeSlots(availableTimeSlots);
-        }
-
-        return schedules;
+        return scheduleRepository.findByDate(date);
     }
 }
