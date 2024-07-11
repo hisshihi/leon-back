@@ -96,4 +96,9 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .orElse(0);
     }
 
+    @Override
+    public List<Appointment> findByDate(LocalDate date) {
+        return appointmentRepository.findByDate(date);
+    }
+
 }

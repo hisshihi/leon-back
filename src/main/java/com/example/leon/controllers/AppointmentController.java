@@ -1,7 +1,9 @@
 package com.example.leon.controllers;
 
+import com.example.leon.domain.dto.AppointmentDto;
 import com.example.leon.domain.entities.Appointment;
 import com.example.leon.domain.entities.Masters;
+import com.example.leon.mappers.impl.AppointmentMapper;
 import com.example.leon.services.AppointmentService;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,7 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
     private final MastersService mastersService;
+    private final AppointmentMapper appointmentMapper;
     private final String ACCOUNT_SID = "ACbfbbf74795104a6c2c63b3d268b46d3a";
     private final String AUTH_TOKEN = "db111304a236c10f8e1a50bfe16cad42";
     private final String SERVICE_SID = "VA81459b11d4d58ee79f41b89e8367f42a";
@@ -140,6 +144,14 @@ public class AppointmentController {
         Masters master = (Masters) mastersService.masterDetailService().loadUserByUsername(principal.getName());
         int earnings = appointmentService.getEarningsByMaster(master.getId());
         return ResponseEntity.ok(earnings);
+    }
+
+//    Поиск записи по числу
+    @GetMapping("/date")
+    private ResponseEntity<List<AppointmentDto>> getAppointmentForDate(@RequestParam LocalDate date) {
+        List<Appointment> appointments = appointmentService.findByDate(date);
+        List<AppointmentDto> appointmentDtos = appointments.stream().map(appointmentMapper::mapTo).toList();
+        return ResponseEntity.ok(appointmentDtos);
     }
 
 }

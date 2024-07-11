@@ -25,4 +25,6 @@ public interface AppointmentService {
     int getTotalEarnings();
 
     int getEarningsByMaster(Long masterId);
+
+    List<Appointment> findByDate(LocalDate date);
 }
