@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MasterSmallMapper implements Mapper<Masters, MasterDtoSmall> {
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
 
     @Override

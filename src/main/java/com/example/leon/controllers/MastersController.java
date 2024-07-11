@@ -1,9 +1,11 @@
 package com.example.leon.controllers;
 
 import com.example.leon.domain.dto.MasterDto;
+import com.example.leon.domain.dto.MasterDtoSmall;
 import com.example.leon.domain.entities.Masters;
 import com.example.leon.domain.entities.Role;
 import com.example.leon.mappers.impl.MasterMapper;
+import com.example.leon.mappers.impl.MasterSmallMapper;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ public class MastersController {
     private final MastersService mastersService;
     private final MasterMapper masterMapper;
     private final PasswordEncoder passwordEncoder;
+    private final MasterSmallMapper masterSmallMapper;
 
     @PostMapping
     private ResponseEntity<Masters> createMasters(
@@ -68,6 +71,14 @@ public class MastersController {
         List<Masters> masters = mastersService.findAll();
         List<MasterDto> masterDtoList = masters.stream().map(masterMapper::mapTo).toList();
         return new ResponseEntity<>(masterDtoList, HttpStatus.OK);
+    }
+
+//    Быстрый вывод мастеров
+    @GetMapping("/small")
+    private ResponseEntity<List<MasterDtoSmall>> listLittleMasters() {
+        List<Masters> masters = mastersService.findAll();
+        List<MasterDtoSmall> masterDtoSmalls = masters.stream().map(masterSmallMapper::mapTo).collect(Collectors.toList());
+        return new ResponseEntity<>(masterDtoSmalls, HttpStatus.OK);
     }
 
 //    Вывод всех мастеров для админа
