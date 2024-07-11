@@ -82,8 +82,14 @@ public class AppointmentController {
 //    }
 
     @PostMapping
-    private ResponseEntity<Void> createAppointment(@RequestBody Appointment appointment) {
+    private ResponseEntity<Void> createAppointment(@RequestBody Appointment appointment, Principal principal) {
         if (!appointmentService.existsByDateAndTime(appointment.getDate(), appointment.getTime())) {
+
+            if (appointment.getMaster() == null) {
+                Masters masters = (Masters) mastersService.masterDetailService().loadUserByUsername(principal.getName());
+                appointment.setMaster(masters);
+            }
+
             appointmentService.create(appointment);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
