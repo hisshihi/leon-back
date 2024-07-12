@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ public class ServiceAppointment {
     @OneToMany(mappedBy = "serviceAppointment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ServicePrice> prices = new ArrayList<>();
+
+    private LocalTime executionTime;
 
 }
 

@@ -4,15 +4,13 @@ import com.example.leon.domain.entities.*;
 import com.example.leon.repositories.AppointmentRepository;
 import com.example.leon.repositories.ScheduleRepository;
 import com.example.leon.services.ScheduleService;
+import com.example.leon.services.ServiceAppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +19,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final AppointmentRepository appointmentRepository;
+    private final ServiceAppointmentService serviceAppointmentService;
 
     /**
      * Создает расписание на месяц для указанного мастера.
@@ -161,10 +160,33 @@ public class ScheduleServiceImpl implements ScheduleService {
         // Получаем все записи на указанную дату
         List<Appointment> appointments = appointmentRepository.findByDate(date);
 
+        // Получаем все ServiceAppointment
+        List<ServiceAppointment> serviceAppointments = serviceAppointmentService.findAll();
+
         // Собираем все занятые временные слоты
-        Set<LocalTime> occupiedTimeSlots = appointments.stream()
-                .map(Appointment::getTime)
-                .collect(Collectors.toSet());
+        Set<LocalTime> occupiedTimeSlots = new HashSet<>();
+        for (Appointment appointment : appointments) {
+            String serviceName = appointment.getService();
+            ServiceAppointment serviceAppointment = serviceAppointments.stream()
+                    .filter(sa -> sa.getName().equals(serviceName))
+                    .findFirst()
+                    .orElse(null);
+
+            // Если serviceAppointment найден, продолжаем
+            if (serviceAppointment != null) {
+                LocalTime appointmentTime = appointment.getTime();
+                LocalTime executionTime = serviceAppointment.getExecutionTime();
+                LocalTime endTime = appointmentTime.plusHours(executionTime.getHour()).plusMinutes(executionTime.getMinute());
+                LocalTime startTime = appointmentTime.minusHours(executionTime.getHour()).minusMinutes(executionTime.getMinute());
+
+                // Добавляем все слоты от startTime до endTime с шагом в 30 минут
+                LocalTime currentTime = startTime;
+                while (currentTime.isBefore(endTime)) {
+                    occupiedTimeSlots.add(currentTime); // Добавляем текущее startTime
+                    currentTime = currentTime.plusMinutes(30); // Переходим к следующему 30-минутному слоту
+                }
+            }
+        }
 
         // Получаем расписание на указанную дату
         List<Schedule> schedules = scheduleRepository.findByDate(date);
