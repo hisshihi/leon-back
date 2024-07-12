@@ -160,17 +160,16 @@ public class ScheduleServiceImpl implements ScheduleService {
         // Получаем все записи на указанную дату
         List<Appointment> appointments = appointmentRepository.findByDate(date);
 
-        // Получаем все ServiceAppointment
-        List<ServiceAppointment> serviceAppointments = serviceAppointmentService.findAll();
+        // Создаем мапу для быстрого доступа к ServiceAppointment по имени сервиса
+        Map<String, ServiceAppointment> serviceAppointmentMap = serviceAppointmentService.findAll()
+                .stream()
+                .collect(Collectors.toMap(ServiceAppointment::getName, sa -> sa));
 
         // Собираем все занятые временные слоты
         Set<LocalTime> occupiedTimeSlots = new HashSet<>();
         for (Appointment appointment : appointments) {
             String serviceName = appointment.getService();
-            ServiceAppointment serviceAppointment = serviceAppointments.stream()
-                    .filter(sa -> sa.getName().equals(serviceName))
-                    .findFirst()
-                    .orElse(null);
+            ServiceAppointment serviceAppointment = serviceAppointmentMap.get(serviceName);
 
             // Если serviceAppointment найден, продолжаем
             if (serviceAppointment != null) {
