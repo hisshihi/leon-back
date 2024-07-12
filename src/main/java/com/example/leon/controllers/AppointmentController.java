@@ -89,7 +89,9 @@ public class AppointmentController {
     private ResponseEntity<Void> createAppointment(@RequestBody Appointment appointment, Principal principal) {
         if (!appointmentService.existsByDateAndTime(appointment.getDate(), appointment.getTime())) {
 
-            if (appointment.getMaster() == null) {
+            System.out.println(appointment.getMaster().getId());
+
+            if (appointment.getMaster().getId() == null) {
                 Masters masters = (Masters) mastersService.masterDetailService().loadUserByUsername(principal.getName());
                 appointment.setMaster(masters);
             }
