@@ -179,4 +179,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         return schedules;
     }
+
+    @Override
+    public boolean scheduleExistsForMonth(Long masterId, int year, int month) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        return scheduleRepository.existsByMasterIdAndDateBetween(masterId, startDate, endDate);
+    }
 }

@@ -30,4 +30,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
     @Query("SELECT s FROM Schedule s JOIN FETCH s.master WHERE s.date = :date")
     List<Schedule> findByDateWithMaster(@Param("date") LocalDate date);
+
+    boolean existsByMasterIdAndDateBetween(Long masterId, LocalDate startDate, LocalDate endDate);
 }

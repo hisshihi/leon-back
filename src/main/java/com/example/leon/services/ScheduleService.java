@@ -18,4 +18,6 @@ public interface ScheduleService {
     List<DaySchedule> getMonthlySchedule(int year, int month);
 
     List<Schedule> getDailySchedule(LocalDate date);
+
+    boolean scheduleExistsForMonth(Long masterId, int year, int month);
 }
