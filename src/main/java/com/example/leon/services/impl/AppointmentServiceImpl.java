@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +24,24 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final MastersService mastersService;
     private final EarningRepository earningRepository;
+    private final TelegramServiceImpl telegramService;
 
     @Override
     public void create(Appointment appointment) {
         appointment.setDateCreated(LocalDate.now());
         appointmentRepository.save(appointment);
+
+        Optional<Masters> master = mastersService.findById(appointment.getMaster().getId());
+
+        String message = String.format("Новая запись.\nИмя клиента: %s\nДата: %s\nВремя: %s\nИмя мастера: %s %s\nУслуга: %s",
+                appointment.getClientName(),
+                appointment.getDate(),
+                appointment.getTime(),
+                master.get().getFirstName(),
+                master.get().getLastName(),
+                appointment.getService());
+
+        telegramService.sendMessage(message);
     }
 
     @Override

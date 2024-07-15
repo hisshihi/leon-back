@@ -23,3 +23,9 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
+
+telegram:
+  bot:
+    token: 7341574913:AAHycVDUhoarPx-AZc99VzbkdbM-fJCFLBI
+  chat:
+    id: -1002225238036
