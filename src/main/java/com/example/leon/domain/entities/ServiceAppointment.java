@@ -2,10 +2,7 @@ package com.example.leon.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -26,6 +23,7 @@ public class ServiceAppointment {
     @Column(name = "name_service")
     private String name;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "serviceAppointment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ServicePrice> prices = new ArrayList<>();

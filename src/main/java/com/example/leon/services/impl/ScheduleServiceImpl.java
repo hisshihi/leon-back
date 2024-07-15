@@ -5,6 +5,7 @@ import com.example.leon.repositories.AppointmentRepository;
 import com.example.leon.repositories.ScheduleRepository;
 import com.example.leon.services.ScheduleService;
 import com.example.leon.services.ServiceAppointmentService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -181,8 +182,8 @@ public class ScheduleServiceImpl implements ScheduleService {
                 // Добавляем все слоты от startTime до endTime с шагом в 30 минут
                 LocalTime currentTime = startTime;
                 while (currentTime.isBefore(endTime)) {
-                    occupiedTimeSlots.add(currentTime); // Добавляем текущее startTime
-                    currentTime = currentTime.plusMinutes(30); // Переходим к следующему 30-минутному слоту
+                    occupiedTimeSlots.add(currentTime);
+                    currentTime = currentTime.plusMinutes(30);
                 }
             }
         }

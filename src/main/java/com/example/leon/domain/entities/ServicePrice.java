@@ -2,10 +2,7 @@ package com.example.leon.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -24,6 +21,7 @@ public class ServicePrice {
     @Column(name = "price")
     private Integer price;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "service_appointment_id")
     @JsonBackReference
