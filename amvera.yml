@@ -7,7 +7,7 @@ meta:
 build:
   artifacts:
     build/libs/*.jar: /
-  args: spring-boot:repackage
+  args: -Dserver.port=8080
 run:
   jarName: leon-0.0.1-SNAPSHOT.jar
   persistenceMount: /data
