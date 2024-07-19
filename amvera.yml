@@ -1,0 +1,14 @@
+---
+meta:
+  environment: jvm
+  toolchain:
+    name: gradle
+    version: 17
+build:
+  artifacts:
+    build/libs/*.jar: /
+  args: spring-boot:repackage
+run:
+  jarName: leon-0.0.1-SNAPSHOT.jar
+  persistenceMount: /data
+  containerPort: 8080
