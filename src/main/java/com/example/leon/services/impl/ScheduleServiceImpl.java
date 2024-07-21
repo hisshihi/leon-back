@@ -7,9 +7,6 @@ import com.example.leon.services.ScheduleService;
 import com.example.leon.services.ServiceAppointmentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -72,7 +69,6 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return Список расписаний
      */
     @Override
-    @Cacheable("schedules")
     public List<Schedule> getScheduleForMaster(Long masterId) {
         return scheduleRepository.findByMasterId(masterId);
     }
@@ -86,7 +82,6 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param isWorking Статус работы (работает/не работает)
      */
     @Override
-    @CacheEvict(value = "schedules", key = "#masterId")
     public void updateSchedule(Long masterId, List<LocalDate> dates, List<LocalTime> times, boolean isWorking) {
         for (LocalDate date : dates) {
             Schedule schedule = scheduleRepository.findByMasterIdAndDate(masterId, date);
@@ -128,7 +123,6 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return Список расписаний на каждый день месяца
      */
     @Override
-    @Cacheable("monthlySchedules")
     public List<DaySchedule> getMonthlySchedule(int year, int month) {
         LocalDate latestScheduleDate = scheduleRepository.findLatestScheduleDate();
         if (latestScheduleDate == null) {
@@ -163,7 +157,6 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return Список расписаний на указанный день
      */
     @Override
-    @Cacheable("dailySchedules")
     public List<Schedule> getDailySchedule(LocalDate date) {
         // Получаем все записи на указанную дату
         List<Appointment> appointments = appointmentRepository.findByDate(date);
@@ -215,10 +208,5 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
         return scheduleRepository.existsByMasterIdAndDateBetween(masterId, startDate, endDate);
-    }
-
-    @CachePut(value = "schedules", key = "#masterId")
-    public List<Schedule> updateAndCacheSchedule(Long masterId) {
-        return scheduleRepository.findByMasterId(masterId);
     }
 }

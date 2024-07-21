@@ -22,5 +22,3 @@ public class CorsConfig {
 
     }
 }
-
-//https://leon-studio.ru

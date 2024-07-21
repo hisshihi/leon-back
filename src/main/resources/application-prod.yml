@@ -18,7 +18,7 @@ spring:
   #    open-in-view: false
   graphql:
     cors:
-      allowed-origins: https://leon-studio.ru
+      allowed-origins: http://localhost:8081
   servlet:
     multipart:
       max-file-size: 20MB
