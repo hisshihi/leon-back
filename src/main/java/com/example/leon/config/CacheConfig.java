@@ -16,7 +16,10 @@ public class CacheConfig {
     @Bean
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(List.of(new ConcurrentMapCache("schedule")));
+        cacheManager.setCaches(List.of(
+                new ConcurrentMapCache("schedule"),
+                new ConcurrentMapCache("master")
+        ));
         return cacheManager;
     }
 
