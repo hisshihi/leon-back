@@ -1,6 +1,5 @@
-package com.example.leon.domain.entities;
+package com.example.leon.domain.dto;
 
-import com.example.leon.domain.dto.ScheduleDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DaySchedule {
+public class ScheduleDto {
 
+    private Long id;
     private LocalDate date;
-    private List<ScheduleDto> schedules;
+    private List<TimeSlotDto> timeSlots;
 
 }

@@ -28,7 +28,7 @@ public class Schedule {
     @Column(name = "date", nullable = true)
     private LocalDate date;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<TimeSlot> timeSlots;
 

@@ -4,6 +4,7 @@ import com.example.leon.domain.entities.DaySchedule;
 import com.example.leon.domain.entities.Schedule;
 import com.example.leon.requests.ScheduleUpdateRequest;
 import com.example.leon.services.ScheduleService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -55,12 +56,15 @@ public class ScheduleController {
         return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 
+    @Transactional
     @GetMapping(path = "/month")
     public ResponseEntity<List<DaySchedule>> getSchedule(
             @RequestParam int year,
             @RequestParam int month
     ) {
+        log.info("Поиск расписания на месяц = {}", month);
         List<DaySchedule> schedules = scheduleService.getMonthlySchedule(year, month);
+        log.info("Поиск выполнен успешно");
         return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 

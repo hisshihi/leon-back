@@ -1,12 +1,16 @@
 package com.example.leon.services.impl;
 
+import com.example.leon.domain.dto.ScheduleDto;
+import com.example.leon.domain.dto.TimeSlotDto;
 import com.example.leon.domain.entities.*;
+import com.example.leon.mappers.impl.TimeSlotMapper;
 import com.example.leon.repositories.AppointmentRepository;
 import com.example.leon.repositories.ScheduleRepository;
 import com.example.leon.services.ScheduleService;
 import com.example.leon.services.ServiceAppointmentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,6 +25,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final AppointmentRepository appointmentRepository;
     private final ServiceAppointmentService serviceAppointmentService;
+    private final TimeSlotMapper timeSlotMapper;
 
     /**
      * Создает расписание на месяц для указанного мастера.
@@ -138,17 +143,29 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
         List<Schedule> schedules = scheduleRepository.findByDateBetween(startDate, endDate);
-        Map<LocalDate, List<Schedule>> groupedSchedules = schedules.stream()
-                .collect(Collectors.groupingBy(Schedule::getDate));
+
+        List<ScheduleDto> scheduleDtos = schedules.stream()
+                .map(schedule -> new ScheduleDto(
+                        schedule.getId(),
+                        schedule.getDate(),
+                        schedule.getTimeSlots().stream()
+                                .map(timeSlotMapper::mapTo)
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+
+        Map<LocalDate, List<ScheduleDto>> groupedSchedules = scheduleDtos.stream()
+                .collect(Collectors.groupingBy(ScheduleDto::getDate));
 
         List<DaySchedule> daySchedules = new ArrayList<>();
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            List<Schedule> dailySchedules = groupedSchedules.getOrDefault(date, new ArrayList<>());
+            List<ScheduleDto> dailySchedules = groupedSchedules.getOrDefault(date, new ArrayList<>());
             daySchedules.add(new DaySchedule(date, dailySchedules));
         }
 
         return daySchedules;
     }
+
 
     /**
      * Получает расписание на указанный день.

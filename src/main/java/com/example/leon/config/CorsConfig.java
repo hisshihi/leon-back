@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://leon-studio.ru")
+                        .allowedOrigins("http://localhost:8081")
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
                         .allowedHeaders("*");
             }
@@ -22,3 +22,5 @@ public class CorsConfig {
 
     }
 }
+
+// https://leon-studio.ru
