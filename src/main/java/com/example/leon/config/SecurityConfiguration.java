@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/schedule/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/service").permitAll()
                         .requestMatchers(HttpMethod.GET, "/home-care").permitAll()
+                        .requestMatchers("email/**").permitAll()
                         // Разрешение доступа без авторизации к POST запросу
                         .requestMatchers(HttpMethod.POST, "/appointment/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
