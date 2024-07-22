@@ -19,13 +19,13 @@ public interface ScheduleService {
     List<Schedule> getScheduleForMaster(Long masterId);
 
     @CacheEvict(value = "schedule", allEntries = true)
-    @CachePut(value = "schedule", key = "#masterId + '-' + #dates.hashCode() + '-' + #times.hashCode()")
     void updateSchedule(Long masterId, List<LocalDate> dates, List<LocalTime> times, boolean isWorking);
 
     @Cacheable(value = "schedule", key = "#year + '-' + #month")
     List<DaySchedule> getMonthlySchedule(int year, int month);
 
     @Cacheable(value = "schedule", key = "#date")
+    @CacheEvict(value = "schedule", allEntries = true)
     List<Schedule> getDailySchedule(LocalDate date);
 
     @Cacheable(value = "schedule", key = "#masterId + '-' + #year + '-' + #month")

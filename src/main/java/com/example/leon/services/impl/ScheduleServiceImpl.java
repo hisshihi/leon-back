@@ -1,16 +1,13 @@
 package com.example.leon.services.impl;
 
 import com.example.leon.domain.dto.ScheduleDto;
-import com.example.leon.domain.dto.TimeSlotDto;
 import com.example.leon.domain.entities.*;
 import com.example.leon.mappers.impl.TimeSlotMapper;
 import com.example.leon.repositories.AppointmentRepository;
 import com.example.leon.repositories.ScheduleRepository;
 import com.example.leon.services.ScheduleService;
 import com.example.leon.services.ServiceAppointmentService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
