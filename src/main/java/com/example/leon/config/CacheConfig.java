@@ -18,7 +18,8 @@ public class CacheConfig {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(List.of(
                 new ConcurrentMapCache("schedule"),
-                new ConcurrentMapCache("master")
+                new ConcurrentMapCache("master"),
+                new ConcurrentMapCache("homeCare")
         ));
         return cacheManager;
     }
