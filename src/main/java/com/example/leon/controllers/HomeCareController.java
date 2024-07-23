@@ -47,4 +47,10 @@ public class HomeCareController {
         return ResponseEntity.ok(homeCares);
     }
 
+    @DeleteMapping("/{id}")
+    private ResponseEntity<Void> deleteHomeCare(@PathVariable Long id) {
+        homeCareService.deleteHomeCare(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

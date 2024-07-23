@@ -23,4 +23,9 @@ public class HomeCareServiceImpl implements HomeCareService {
     public List<HomeCare> findAllHomeCares() {
         return homeCareRepository.findAll();
     }
+
+    @Override
+    public void deleteHomeCare(Long id) {
+        homeCareRepository.deleteById(id);
+    }
 }

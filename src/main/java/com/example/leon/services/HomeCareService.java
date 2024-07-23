@@ -15,4 +15,7 @@ public interface HomeCareService {
 
     @Cacheable("homeCare")
     List<HomeCare> findAllHomeCares();
+
+    @CacheEvict(value = "homeCare", allEntries = true)
+    void deleteHomeCare(Long id);
 }
