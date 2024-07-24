@@ -26,7 +26,7 @@ public class InitialUserEntity implements CommandLineRunner {
         admin.setFirstName("Елена");
         admin.setLastName("Львова");
         admin.setPost("Мастер технолог");
-        admin.setPassword(passwordEncoder.encode("123"));
+        admin.setPassword(passwordEncoder.encode("XlIxWubZ"));
         admin.setUserName("admin");
 
         Optional<Masters> masterAdmin = mastersRepository.findByUserName(admin.getUsername());
