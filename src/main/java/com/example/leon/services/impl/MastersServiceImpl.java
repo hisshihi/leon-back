@@ -69,6 +69,7 @@ public class MastersServiceImpl implements MastersService {
         if (masters.getInst() != null) existingMaster.setInst(masters.getInst());
         if (masters.getUsername() != null) existingMaster.setUserName(masters.getUsername());
         if (masters.getImage() != null) existingMaster.setImage(masters.getImage());
+        if (masters.getPassword() != null) existingMaster.setPassword(masters.getPassword());
 
         return mastersRepository.save(existingMaster);
     }

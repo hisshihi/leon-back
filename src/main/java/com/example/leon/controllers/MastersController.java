@@ -98,7 +98,8 @@ public class MastersController {
             @RequestParam(value = "telegram", required = false) String telegram,
             @RequestParam(value = "inst", required = false) String inst,
             @RequestParam(value = "username", required = false) String userName,
-            @RequestParam(value = "image", required = false) MultipartFile file
+            @RequestParam(value = "image", required = false) MultipartFile file,
+            @RequestParam(value = "password", required = false) String password
     ) throws IOException {
 
         // Загрузка существующуего пользователя из бд
@@ -116,6 +117,7 @@ public class MastersController {
         if (inst != null) masters.setInst(inst);
         if (userName != null) masters.setUserName(userName);
         if (file != null && !file.isEmpty()) masters.setImage(file.getBytes());
+        if (password != null) masters.setPassword(passwordEncoder.encode(password));
 
         mastersService.updateMaster(id, masters);
         return ResponseEntity.ok(masters);
