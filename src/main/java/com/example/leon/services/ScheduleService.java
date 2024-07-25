@@ -25,7 +25,6 @@ public interface ScheduleService {
     List<DaySchedule> getMonthlySchedule(int year, int month);
 
     @Cacheable(value = "schedule", key = "#date")
-    @CacheEvict(value = "schedule", allEntries = true)
     List<Schedule> getDailySchedule(LocalDate date);
 
     @Cacheable(value = "schedule", key = "#masterId + '-' + #year + '-' + #month")
