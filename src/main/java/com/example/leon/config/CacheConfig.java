@@ -19,7 +19,7 @@ public class CacheConfig {
         cacheManager.setCaches(List.of(
                 new ConcurrentMapCache("schedule"),
                 new ConcurrentMapCache("master"),
-                new ConcurrentMapCache("homeCare")
+                new ConcurrentMapCache("home-care")
         ));
         return cacheManager;
     }

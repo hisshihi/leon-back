@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface HomeCareService {
 
-    @CacheEvict(value = "homeCare", allEntries = true)
-    @CachePut(value = "homeCare", key = "homeCare.id")
+    @CacheEvict(value = "home-care", allEntries = true)
+    @CachePut(value = "home-care", key = "#homeCare.id")
     void save(HomeCare homeCare);
 
-    @Cacheable("homeCare")
+    @Cacheable("home-care")
     List<HomeCare> findAllHomeCares();
 
-    @CacheEvict(value = "homeCare", allEntries = true)
+    @CacheEvict(value = "home-care", allEntries = true)
     void deleteHomeCare(Long id);
 }

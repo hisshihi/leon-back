@@ -20,7 +20,7 @@ public class HomeCareController {
     private final HomeCareService homeCareService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    private ResponseEntity<Void> create(
+    public ResponseEntity<Void> create(
             @RequestParam("image1") MultipartFile image1,
             @RequestParam("image2") MultipartFile image2,
             @RequestParam("text") String text
