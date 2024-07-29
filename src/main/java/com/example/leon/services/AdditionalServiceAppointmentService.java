@@ -8,4 +8,6 @@ public interface AdditionalServiceAppointmentService {
     void create(AdditionalServiceAppointment serviceAppointment);
 
     List<AdditionalServiceAppointment> findAll();
+
+    void delete(Long id);
 }

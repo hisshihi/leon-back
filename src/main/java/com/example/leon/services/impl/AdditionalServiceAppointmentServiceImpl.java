@@ -23,4 +23,9 @@ public class AdditionalServiceAppointmentServiceImpl implements AdditionalServic
     public List<AdditionalServiceAppointment> findAll() {
         return additionalServiceAppointmentRepository.findAll();
     }
+
+    @Override
+    public void delete(Long id) {
+        additionalServiceAppointmentRepository.deleteById(id);
+    }
 }
