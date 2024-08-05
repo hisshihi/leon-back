@@ -27,4 +27,9 @@ public class ServiceAppointmentServiceImpl implements ServiceAppointmentService 
     public List<ServiceAppointment> findAll() {
         return serviceAppointmentRepository.findAll();
     }
+
+    @Override
+    public void deleteService(Long id) {
+        serviceAppointmentRepository.deleteById(id);
+    }
 }

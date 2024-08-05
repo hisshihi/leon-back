@@ -29,4 +29,10 @@ public class ServiceAppointmentController {
         return ResponseEntity.ok(new ArrayList<>(serviceAppointmentList));
     }
 
+    @DeleteMapping("/{id}")
+    private ResponseEntity<Void> delete(@PathVariable Long id) {
+        serviceAppointmentService.deleteService(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
