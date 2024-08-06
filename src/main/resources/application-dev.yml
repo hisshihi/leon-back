@@ -34,3 +34,7 @@ telegram:
     token: 7341574913:AAHycVDUhoarPx-AZc99VzbkdbM-fJCFLBI
   chat:
     id: -1002225238036
+
+iqsms:
+  login: f1722934271657
+  password: 487982

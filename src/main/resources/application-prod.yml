@@ -6,6 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       auto-commit: false
+      maximum-pool-size: 10
   jpa:
     hibernate:
       ddl-auto: update
@@ -34,3 +35,6 @@ telegram:
     token: 7341574913:AAHycVDUhoarPx-AZc99VzbkdbM-fJCFLBI
   chat:
     id: -1002225238036
+iqsms:
+  login: f1722934271657
+  password: 487982
