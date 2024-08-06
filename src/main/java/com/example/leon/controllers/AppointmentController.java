@@ -7,8 +7,8 @@ import com.example.leon.mappers.impl.AppointmentMapper;
 import com.example.leon.services.AppointmentService;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "appointment")
 @RequiredArgsConstructor
+@Slf4j
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
@@ -31,10 +32,10 @@ public class AppointmentController {
     private final String SERVICE_SID = "VA81459b11d4d58ee79f41b89e8367f42a";
 
     /*
-    * Разработал подтверждение записи через телефон
-    * Сначала отправляется запрос на request-code с телефоном в url
-    * Затем запрос на appointment c кодом, телефон должен быть вида - +79088379382
-    * */
+     * Разработал подтверждение записи через телефон
+     * Сначала отправляется запрос на request-code с телефоном в url
+     * Затем запрос на appointment c кодом, телефон должен быть вида - +79088379382
+     * */
 //    @PostMapping("/request-code")
 //    public ResponseEntity<Void> sendSMS(@RequestParam String smsNumber) {
 //        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
@@ -107,7 +108,7 @@ public class AppointmentController {
         return new ResponseEntity<>(new ArrayList<>(appointments), HttpStatus.OK);
     }
 
-//    Получение записей мастера
+    //    Получение записей мастера
     @GetMapping("/master")
     private ResponseEntity<List<Appointment>> getListAppointmentsForMaster(Principal principal) {
         List<Appointment> appointments = appointmentService.findAllByMaster(principal);
@@ -148,7 +149,7 @@ public class AppointmentController {
         return ResponseEntity.ok(earnings);
     }
 
-//    Поиск записи по числу
+    //    Поиск записи по числу
     @GetMapping("/date")
     private ResponseEntity<List<AppointmentDto>> getAppointmentForDate(@RequestParam LocalDate date) {
         List<Appointment> appointments = appointmentService.findByDate(date);
