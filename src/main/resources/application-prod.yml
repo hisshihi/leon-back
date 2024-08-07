@@ -38,3 +38,4 @@ telegram:
 iqsms:
   login: f1722934271657
   password: 487982
+  url: https://api.iqsms.ru
