@@ -153,8 +153,15 @@ public class AppointmentController {
     @GetMapping("/date")
     private ResponseEntity<List<Appointment>> getAppointmentForDate(@RequestParam LocalDate date) {
         List<Appointment> appointments = appointmentService.findByDate(date);
-//        List<AppointmentDto> appointmentDtos = appointments.stream().map(appointmentMapper::mapTo).toList();
         return ResponseEntity.ok(appointments);
+    }
+
+    // Поиск записи по числу но возвращает dto
+    @GetMapping("/date/dto")
+    private ResponseEntity<List<AppointmentDto>> getAppointmentDtoForDate(@RequestParam LocalDate date) {
+        List<Appointment> appointments = appointmentService.findByDate(date);
+        List<AppointmentDto> appointmentDtos = appointments.stream().map(appointmentMapper::mapTo).toList();
+        return ResponseEntity.ok(appointmentDtos);
     }
 
 }
