@@ -1,4 +1,4 @@
-version: latest
+version: '3.1'
 services:
   posgres:
     image: postgres:16

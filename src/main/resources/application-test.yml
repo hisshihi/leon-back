@@ -20,8 +20,21 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
+  graphql:
+    cors:
+      allowed-origins: http://localhost:8081
+  mail:
+    host: smtp.leon-studio.ru
+    port: 587
+    username: leon@leon-studio.ru
+    password: nB7nQ9eN3xqP4dC4
+
 telegram:
   bot:
     token: 7341574913:AAHycVDUhoarPx-AZc99VzbkdbM-fJCFLBI
   chat:
     id: -1002225238036
+iqsms:
+  login: f1722934271657
+  password: 487982
+  url: https://api.iqsms.ru

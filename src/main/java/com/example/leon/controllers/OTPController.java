@@ -28,6 +28,9 @@ public class OTPController {
     @PostMapping("/validate")
     private ResponseEntity<Void> validateOTP(@RequestParam String phone, @RequestParam String otp) {
         boolean isValid = otpService.validateOTP(phone, otp);
+        log.info("Верен ли код и телефон {}", isValid);
+        log.info("Телефон {}", phone);
+        log.info("Код {}", otp);
         if (isValid) return new ResponseEntity<>(HttpStatus.OK);
         else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
