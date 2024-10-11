@@ -8,6 +8,7 @@ import com.example.leon.repositories.EarningRepository;
 import com.example.leon.services.AppointmentService;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -29,6 +31,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void create(Appointment appointment) {
         appointment.setDateCreated(LocalDate.now());
+
+        if (appointment.getClientPhone().startsWith("+8")) {
+            String updateClientPhone = appointment.getClientPhone().replaceFirst("\\+8", "+7");
+            appointment.setClientPhone(updateClientPhone);
+        }
+
         appointmentRepository.save(appointment);
 
         Optional<Masters> master = mastersService.findById(appointment.getMaster().getId());
