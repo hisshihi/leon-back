@@ -49,7 +49,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 master.get().getLastName(),
                 appointment.getService());
 
-        telegramService.sendMessage(message);
+//        telegramService.sendMessage(message);
     }
 
     @Override

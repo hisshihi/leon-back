@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -61,6 +62,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/appointment/date").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
                         .requestMatchers(HttpMethod.GET, "/masters/small").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
                         .requestMatchers(HttpMethod.POST, "/home-care").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
+                        .requestMatchers( "/rest/admin-ui/**").hasAnyAuthority(Role.ADMIN.name(), Role.MASTER.name())
                         // Все остальные запросы требуют аутентификации
                         .anyRequest().authenticated()
                 )
