@@ -1,11 +1,15 @@
 package com.example.leon.services.impl;
 
 import com.example.leon.domain.entities.Appointment;
+import com.example.leon.domain.entities.BlackListPhone;
 import com.example.leon.domain.entities.Earnings;
 import com.example.leon.domain.entities.Masters;
+import com.example.leon.exceptions.PhoneInBlackListException;
 import com.example.leon.repositories.AppointmentRepository;
+import com.example.leon.repositories.BlackListPhoneRepository;
 import com.example.leon.repositories.EarningRepository;
 import com.example.leon.services.AppointmentService;
+import com.example.leon.services.BlackListPhoneService;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +31,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final MastersService mastersService;
     private final EarningRepository earningRepository;
     private final TelegramServiceImpl telegramService;
+    private final BlackListPhoneService blackListPhoneService;
 
     @Override
     public void create(Appointment appointment) {
@@ -37,7 +42,13 @@ public class AppointmentServiceImpl implements AppointmentService {
             appointment.setClientPhone(updateClientPhone);
         }
 
-        appointmentRepository.save(appointment);
+        // Проверяем, есть ли телефон в чёрном списке
+        boolean isPhoneInBlackList = blackListPhoneService.phoneIsBlackList(appointment.getClientPhone());
+        if (isPhoneInBlackList) {
+            throw new PhoneInBlackListException("Телефон клиента находится в чёрном списке");
+        }
+
+//        appointmentRepository.save(appointment);
 
         Optional<Masters> master = mastersService.findById(appointment.getMaster().getId());
 
@@ -49,7 +60,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 master.get().getLastName(),
                 appointment.getService());
 
-//        telegramService.sendMessage(message);
+        telegramService.sendMessage(message);
     }
 
     @Override
@@ -98,7 +109,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepository.findByClientNameContainingIgnoreCase(name);
     }
 
-//    Обновление earnings
+    //    Обновление earnings
     private void updateEarnings(Long masterId, int earnings) {
         Earnings existingEarnings = earningRepository.findByMasterId(masterId).orElseGet(() -> Earnings.builder().masterId(masterId).totalEarnings(0).build());
         existingEarnings.setTotalEarnings(existingEarnings.getTotalEarnings() + earnings);

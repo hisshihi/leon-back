@@ -1,5 +1,7 @@
 package com.example.leon.services.impl;
 
+import com.example.leon.exceptions.PhoneInBlackListException;
+import com.example.leon.services.BlackListPhoneService;
 import com.example.leon.services.OTPService;
 import com.example.leon.services.SmsService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,20 @@ public class OTPServiceImpl implements OTPService {
     private final Map<String, String> otpStorage = new ConcurrentHashMap<>();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final SmsService smsService;
+    private final BlackListPhoneService blackListPhoneService;
 
     @Override
     public String generateOTP(String phone) {
+
+        String verifyPhone = "+" + phone;
+
+        log.info(verifyPhone);
+
+        boolean phoneIsBlackList = blackListPhoneService.phoneIsBlackList(verifyPhone.replaceAll(" ", ""));
+        if (phoneIsBlackList) {
+            throw new PhoneInBlackListException("Телефон клиента находится в чёрном списке");
+        }
+
         String otp = String.format("%04d", new Random().nextInt(10000)); // Генерируем 4-х значный код
         log.info("Номер телефона: {}", phone);
         otpStorage.put(phone, otp);

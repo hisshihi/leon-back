@@ -1,7 +1,7 @@
 package com.example.leon.controllers;
 
 import com.example.leon.domain.entities.BlackListPhone;
-import com.example.leon.repositories.BackListPhoneRepository;
+import com.example.leon.repositories.BlackListPhoneRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,51 +21,51 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BlackListPhoneController {
 
-    private final BackListPhoneRepository backListPhoneRepository;
+    private final BlackListPhoneRepository blackListPhoneRepository;
 
     private final ObjectMapper objectMapper;
 
     @GetMapping
     public Page<BlackListPhone> getList(Pageable pageable) {
-        return backListPhoneRepository.findAll(pageable);
+        return blackListPhoneRepository.findAll(pageable);
     }
 
     @GetMapping("/{id}")
     public BlackListPhone getOne(@PathVariable Long id) {
-        Optional<BlackListPhone> blackListPhoneOptional = backListPhoneRepository.findById(id);
+        Optional<BlackListPhone> blackListPhoneOptional = blackListPhoneRepository.findById(id);
         return blackListPhoneOptional.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id)));
     }
 
     @GetMapping("/by-ids")
     public List<BlackListPhone> getMany(@RequestParam List<Long> ids) {
-        return backListPhoneRepository.findAllById(ids);
+        return blackListPhoneRepository.findAllById(ids);
     }
 
     @PostMapping
     public BlackListPhone create(@RequestBody BlackListPhone blackListPhone) {
-        return backListPhoneRepository.save(blackListPhone);
+        return blackListPhoneRepository.save(blackListPhone);
     }
 
     @PatchMapping("/{id}")
     public BlackListPhone patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
-        BlackListPhone blackListPhone = backListPhoneRepository.findById(id).orElseThrow(() ->
+        BlackListPhone blackListPhone = blackListPhoneRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id)));
 
         objectMapper.readerForUpdating(blackListPhone).readValue(patchNode);
 
-        return backListPhoneRepository.save(blackListPhone);
+        return blackListPhoneRepository.save(blackListPhone);
     }
 
     @PatchMapping
     public List<Long> patchMany(@RequestParam List<Long> ids, @RequestBody JsonNode patchNode) throws IOException {
-        Collection<BlackListPhone> blackListPhones = backListPhoneRepository.findAllById(ids);
+        Collection<BlackListPhone> blackListPhones = blackListPhoneRepository.findAllById(ids);
 
         for (BlackListPhone blackListPhone : blackListPhones) {
             objectMapper.readerForUpdating(blackListPhone).readValue(patchNode);
         }
 
-        List<BlackListPhone> resultBlackListPhones = backListPhoneRepository.saveAll(blackListPhones);
+        List<BlackListPhone> resultBlackListPhones = blackListPhoneRepository.saveAll(blackListPhones);
         return resultBlackListPhones.stream()
                 .map(BlackListPhone::getId)
                 .toList();
@@ -73,15 +73,15 @@ public class BlackListPhoneController {
 
     @DeleteMapping("/{id}")
     public BlackListPhone delete(@PathVariable Long id) {
-        BlackListPhone blackListPhone = backListPhoneRepository.findById(id).orElse(null);
+        BlackListPhone blackListPhone = blackListPhoneRepository.findById(id).orElse(null);
         if (blackListPhone != null) {
-            backListPhoneRepository.delete(blackListPhone);
+            blackListPhoneRepository.delete(blackListPhone);
         }
         return blackListPhone;
     }
 
     @DeleteMapping
     public void deleteMany(@RequestParam List<Long> ids) {
-        backListPhoneRepository.deleteAllById(ids);
+        blackListPhoneRepository.deleteAllById(ids);
     }
 }
