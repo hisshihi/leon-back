@@ -48,7 +48,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new PhoneInBlackListException("Телефон клиента находится в чёрном списке");
         }
 
-//        appointmentRepository.save(appointment);
+        appointmentRepository.save(appointment);
 
         Optional<Masters> master = mastersService.findById(appointment.getMaster().getId());
 
