@@ -1,24 +1,23 @@
 package com.example.leon.services.impl;
 
 import com.example.leon.domain.entities.Appointment;
-import com.example.leon.domain.entities.BlackListPhone;
 import com.example.leon.domain.entities.Earnings;
 import com.example.leon.domain.entities.Masters;
 import com.example.leon.exceptions.PhoneInBlackListException;
 import com.example.leon.repositories.AppointmentRepository;
-import com.example.leon.repositories.BlackListPhoneRepository;
 import com.example.leon.repositories.EarningRepository;
 import com.example.leon.services.AppointmentService;
 import com.example.leon.services.BlackListPhoneService;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,12 +59,13 @@ public class AppointmentServiceImpl implements AppointmentService {
                 master.get().getLastName(),
                 appointment.getService());
 
-        telegramService.sendMessage(message);
+        // TODO: убрать перед деплоем
+//        telegramService.sendMessage(message);
     }
 
     @Override
-    public List<Appointment> findAll() {
-        return appointmentRepository.findAllOrderByDateCreatedDesc();
+    public Page<Appointment> findAll(int month, int year, Pageable pageable) {
+        return appointmentRepository.findAllOrderByDateCreatedDesc(month, year, pageable);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.example.leon.services;
 
 import com.example.leon.domain.entities.Appointment;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -13,7 +15,7 @@ public interface AppointmentService {
     @CacheEvict(value = "schedule", allEntries = true)
     void create(Appointment appointment);
 
-    List<Appointment> findAll();
+    Page<Appointment> findAll(int month, int year, Pageable pageable);
 
     boolean existsByDateAndTime(LocalDate date, LocalTime time);
 

@@ -8,6 +8,9 @@ import com.example.leon.services.AppointmentService;
 import com.example.leon.services.MastersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -103,9 +106,16 @@ public class AppointmentController {
     }
 
     @GetMapping
-    private ResponseEntity<List<Appointment>> getListAppointments() {
-        List<Appointment> appointments = appointmentService.findAll();
-        return new ResponseEntity<>(new ArrayList<>(appointments), HttpStatus.OK);
+    private ResponseEntity<Page<Appointment>> getListAppointments(
+            @RequestParam int month,
+            @RequestParam int year,
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        log.info("Month: {}, Year: {}", month, year);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Appointment> appointments = appointmentService.findAll(month, year, pageable);
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
     //    Получение записей мастера
