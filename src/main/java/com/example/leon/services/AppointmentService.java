@@ -33,4 +33,6 @@ public interface AppointmentService {
     int getEarningsByMaster(Long masterId);
 
     List<Appointment> findByDate(LocalDate date);
+
+    boolean existsByMasterId(Long id);
 }

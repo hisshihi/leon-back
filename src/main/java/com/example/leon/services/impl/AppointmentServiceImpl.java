@@ -134,4 +134,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepository.findByDate(date);
     }
 
+    @Override
+    public boolean existsByMasterId(Long id) {
+        return appointmentRepository.existsByMasterId(id);
+    }
+
 }

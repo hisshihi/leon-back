@@ -37,4 +37,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
     List<Appointment> findByClientNameContainingIgnoreCase(String clientName);
 
     List<Appointment> findByDate(LocalDate date);
+
+    boolean existsByMasterId(Long id);
 }

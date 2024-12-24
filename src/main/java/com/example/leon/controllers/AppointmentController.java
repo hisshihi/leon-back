@@ -91,7 +91,8 @@ public class AppointmentController {
 
     @PostMapping
     private ResponseEntity<Void> createAppointment(@RequestBody Appointment appointment, Principal principal) {
-        if (!appointmentService.existsByDateAndTime(appointment.getDate(), appointment.getTime())) {
+        // !appointmentService.existsByDateAndTime(appointment.getDate(), appointment.getTime())
+        if (!appointmentService.existsByMasterId(appointment.getMaster().getId())) {
 
             System.out.println(appointment.getMaster().getId());
 
