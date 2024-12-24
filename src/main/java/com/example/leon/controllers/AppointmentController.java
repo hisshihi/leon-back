@@ -120,9 +120,16 @@ public class AppointmentController {
 
     //    Получение записей мастера
     @GetMapping("/master")
-    private ResponseEntity<List<Appointment>> getListAppointmentsForMaster(Principal principal) {
-        List<Appointment> appointments = appointmentService.findAllByMaster(principal);
-        return ResponseEntity.ok(new ArrayList<>(appointments));
+    private ResponseEntity<Page<Appointment>> getListAppointmentsForMaster(
+            @RequestParam int month,
+            @RequestParam int year,
+            @RequestParam int page,
+            @RequestParam int size,
+            Principal principal
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Appointment> appointments = appointmentService.findAllByMaster(month, year, pageable, principal);
+        return ResponseEntity.ok(appointments);
     }
 
     @PutMapping(value = "/{id}")

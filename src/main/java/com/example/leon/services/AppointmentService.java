@@ -19,7 +19,7 @@ public interface AppointmentService {
 
     boolean existsByDateAndTime(LocalDate date, LocalTime time);
 
-    List<Appointment> findAllByMaster(Principal principal);
+    Page<Appointment> findAllByMaster(int month, int year, Pageable pageable, Principal principal);
 
     @CacheEvict(value = "schedule", allEntries = true)
     void updatedAppointment(Long id, Appointment updatedAppointment);

@@ -74,9 +74,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> findAllByMaster(Principal principal) {
+    public Page<Appointment> findAllByMaster(int month, int year, Pageable pageable, Principal principal) {
         Masters masters = (Masters) mastersService.masterDetailService().loadUserByUsername(principal.getName());
-        return appointmentRepository.findAllByMasterOrderByDateCreatedDesc(masters);
+        return appointmentRepository.findAllByMasterOrderByDateCreatedDesc(masters, month, year, pageable);
     }
 
     @Override

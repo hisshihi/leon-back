@@ -23,8 +23,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
     @Query("SELECT a FROM Appointment a WHERE MONTH(a.date) = :month AND YEAR(a.date) = :year")
     Page<Appointment> findAllOrderByDateCreatedDesc(@Param("month") int month, @Param("year") int year, Pageable pageable);
 
-    @Query("SELECT a FROM Appointment a WHERE a.master = :master ORDER BY a.dateCreated DESC")
-    List<Appointment> findAllByMasterOrderByDateCreatedDesc(@Param("master") Masters masters);
+    @Query("SELECT a FROM Appointment a " +
+            "WHERE a.master = :master " +
+            "AND MONTH(a.date) = :month " +
+            "AND YEAR(a.date) = :year " +
+            "ORDER BY a.dateCreated DESC")
+    Page<Appointment> findAllByMasterOrderByDateCreatedDesc(@Param("master") Masters master,
+                                             @Param("month") int month,
+                                             @Param("year") int year,
+                                             Pageable pageable);
+
 
     List<Appointment> findByClientNameContainingIgnoreCase(String clientName);
 
