@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,19 +92,21 @@ public class AppointmentController {
 
     @PostMapping
     private ResponseEntity<Void> createAppointment(@RequestBody Appointment appointment, Principal principal) {
-        // !appointmentService.existsByDateAndTime(appointment.getDate(), appointment.getTime())
-        if (!appointmentService.existsByMasterId(appointment.getMaster().getId())) {
+        if (appointment.getMaster().getId() == null) {
+            Masters masters = (Masters) mastersService.masterDetailService().loadUserByUsername(principal.getName());
+            appointment.setMaster(masters);
+        }
 
-            System.out.println(appointment.getMaster().getId());
+        Long masterId = appointment.getMaster().getId();
+        LocalDate date = appointment.getDate();
+        LocalTime time = appointment.getTime();
 
-            if (appointment.getMaster().getId() == null) {
-                Masters masters = (Masters) mastersService.masterDetailService().loadUserByUsername(principal.getName());
-                appointment.setMaster(masters);
-            }
-
+        if (!appointmentService.existsByMasterIdAndDateAndTime(masterId, date, time)) { // Изменено
             appointmentService.create(appointment);
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping

@@ -135,8 +135,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public boolean existsByMasterId(Long id) {
-        return appointmentRepository.existsByMasterId(id);
+    public boolean existsByMasterIdAndDateAndTime(Long id, LocalDate date, LocalTime time) {
+        return appointmentRepository.existsByMasterIdAndDateAndTime(id, date, time);
     }
 
 }

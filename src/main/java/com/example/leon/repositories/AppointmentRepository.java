@@ -38,5 +38,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
 
     List<Appointment> findByDate(LocalDate date);
 
-    boolean existsByMasterId(Long id);
+    boolean existsByMasterIdAndDateAndTime(Long id, LocalDate date, LocalTime time);
 }
