@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -180,36 +181,41 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .stream()
                 .collect(Collectors.toMap(ServiceAppointment::getName, sa -> sa));
 
-        // Собираем все занятые временные слоты
-        Set<LocalTime> occupiedTimeSlots = new HashSet<>();
-        for (Appointment appointment : appointments) {
-            String serviceName = appointment.getService();
-            ServiceAppointment serviceAppointment = serviceAppointmentMap.get(serviceName);
-
-            // Если serviceAppointment найден, продолжаем
-            if (serviceAppointment != null) {
-                LocalTime appointmentTime = appointment.getTime();
-                LocalTime executionTime = serviceAppointment.getExecutionTime();
-                LocalTime endTime = appointmentTime.plusHours(executionTime.getHour()).plusMinutes(executionTime.getMinute());
-                LocalTime startTime = appointmentTime.minusHours(executionTime.getHour()).minusMinutes(executionTime.getMinute());
-
-                // Добавляем все слоты от startTime до endTime с шагом в 30 минут
-                LocalTime currentTime = startTime;
-                while (currentTime.isBefore(endTime)) {
-                    occupiedTimeSlots.add(currentTime);
-                    currentTime = currentTime.plusMinutes(30);
-                }
-            }
-        }
-
-        // Получаем расписание на указанную дату
+        // Получаем расписание на указанную дату для всех мастеров
         List<Schedule> schedules = scheduleRepository.findByDate(date);
 
-        // Фильтруем временные слоты, исключая занятые
         for (Schedule schedule : schedules) {
+            // Собираем занятые временные слоты только для текущего мастера
+            Set<LocalTime> occupiedTimeSlots = appointments.stream()
+                    .filter(appointment -> appointment.getMaster().getId().equals(schedule.getMaster().getId()))
+                    .flatMap(appointment -> {
+                        String serviceName = appointment.getService();
+                        ServiceAppointment serviceAppointment = serviceAppointmentMap.get(serviceName);
+
+                        if (serviceAppointment != null) {
+                            LocalTime appointmentTime = appointment.getTime();
+                            LocalTime executionTime = serviceAppointment.getExecutionTime();
+                            LocalTime startTime = appointmentTime.minusHours(executionTime.getHour()).minusMinutes(executionTime.getMinute());
+                            LocalTime endTime = appointmentTime.plusHours(executionTime.getHour()).plusMinutes(executionTime.getMinute());
+
+                            // Генерируем временные слоты от startTime до endTime
+                            List<LocalTime> occupiedSlots = new ArrayList<>();
+                            LocalTime currentTime = startTime;
+                            while (currentTime.isBefore(endTime)) {
+                                occupiedSlots.add(currentTime);
+                                currentTime = currentTime.plusMinutes(30);
+                            }
+                            return occupiedSlots.stream();
+                        }
+                        return Stream.empty();
+                    })
+                    .collect(Collectors.toSet());
+
+            // Фильтруем временные слоты для текущего мастера
             List<TimeSlot> availableTimeSlots = schedule.getTimeSlots().stream()
                     .filter(timeSlot -> !occupiedTimeSlots.contains(timeSlot.getTime()))
                     .collect(Collectors.toList());
+
             schedule.setTimeSlots(availableTimeSlots);
         }
 
