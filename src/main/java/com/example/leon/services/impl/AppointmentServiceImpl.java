@@ -59,8 +59,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 master.get().getLastName(),
                 appointment.getService());
 
-        // TODO: убрать перед деплоем
-//        telegramService.sendMessage(message);
+        telegramService.sendMessage(message);
     }
 
     @Override
