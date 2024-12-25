@@ -4,8 +4,11 @@ import com.example.leon.domain.dto.AppointmentDto;
 import com.example.leon.domain.entities.Appointment;
 import com.example.leon.domain.entities.Masters;
 import com.example.leon.mappers.impl.AppointmentMapper;
+import com.example.leon.repositories.AppointmentRepository;
 import com.example.leon.services.AppointmentService;
 import com.example.leon.services.MastersService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,7 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +32,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class AppointmentController {
+
+    private final ObjectMapper objectMapper;
+
+    private final AppointmentRepository appointmentRepository;
 
     private final AppointmentService appointmentService;
     private final MastersService mastersService;
@@ -143,6 +152,16 @@ public class AppointmentController {
     ) {
         appointmentService.updatedAppointment(id, updatedAppointment);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public Appointment patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id)));
+
+        objectMapper.readerForUpdating(appointment).readValue(patchNode);
+
+        return appointmentRepository.save(appointment);
     }
 
     @DeleteMapping("/{id}")
